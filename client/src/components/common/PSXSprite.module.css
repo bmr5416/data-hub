@@ -1,0 +1,73 @@
+/**
+ * PSXSprite styles
+ * Handles PSX pixel art sprite rendering and animations
+ */
+
+.wrapper {
+  /* Container for proper scaling */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* Reset button styles when interactive */
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Interactive (button) styles */
+button.wrapper {
+  cursor: pointer;
+  transition: transform var(--transition-fast, 150ms) var(--ease-out, ease-out);
+}
+
+button.wrapper:hover {
+  transform: scale(1.1);
+}
+
+button.wrapper:active {
+  transform: scale(0.95);
+}
+
+button.wrapper:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+.sprite {
+  /* Pixel-perfect rendering */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  /* Prevent blurry sub-pixel rendering */
+  will-change: background-position;
+
+  /* Pixel-perfect drop shadow */
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.3));
+}
+
+button.wrapper:hover .sprite {
+  /* Gold glow on hover */
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.3))
+          drop-shadow(0 0 4px rgba(255, 215, 0, 0.5));
+}
+
+/* Animating state - disable hover transforms to prevent jumpiness */
+.animating button.wrapper:hover {
+  transform: none;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  button.wrapper:hover,
+  button.wrapper:active {
+    transform: none;
+  }
+
+  .sprite {
+    animation: none !important;
+  }
+}

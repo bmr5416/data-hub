@@ -1,0 +1,72 @@
+/* AddLineageModal - Content styles (Modal handled by base Modal component) */
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--color-bg-secondary);
+  margin: 0 0 var(--space-6) 0;
+  padding: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.error {
+  background: var(--color-error);
+  color: var(--color-text-primary);
+  padding: var(--space-2);
+  margin: 0 var(--space-4) var(--space-4);
+  font-family: var(--font-family);
+  border: 2px solid var(--win98-border-dark);
+}
+
+.field {
+  margin: 0 var(--space-4) var(--space-4);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.select,
+.textarea {
+  width: 100%;
+  padding: var(--space-2);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--win98-border-dark);
+  border-right-color: var(--win98-border-light);
+  border-bottom-color: var(--win98-border-light);
+}
+
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.select:disabled,
+.textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--win98-border-dark);
+}

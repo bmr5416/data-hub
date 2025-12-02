@@ -1,0 +1,156 @@
+.container {
+  padding: var(--space-4);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-4) 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.row:last-of-type {
+  margin-bottom: 0;
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  min-width: 120px;
+  padding-top: var(--space-2);
+}
+
+/* Group By Chips */
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-primary);
+  border: 2px solid var(--win98-border-dark);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: none;
+}
+
+.chip:hover {
+  border-color: var(--color-primary);
+  background: var(--color-bg-tertiary);
+}
+
+.chip.chipSelected {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.chip.chipRequired {
+  cursor: not-allowed;
+}
+
+.chip.chipRequired:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+}
+
+.chipText {
+  font-family: var(--font-mono);
+}
+
+.hiddenCheckbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.emptyText {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--color-text-muted);
+  padding: var(--space-2);
+}
+
+/* Date Granularity Radio Buttons */
+.radioGroup {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-primary);
+  border: 2px solid var(--win98-border-dark);
+  border-radius: 0;
+  cursor: pointer;
+  transition: none;
+}
+
+.radioLabel:hover {
+  border-color: var(--color-primary);
+}
+
+.radioLabel.radioSelected {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+}
+
+.radio {
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.radioText {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* Help Text */
+.helpText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0 0;
+  padding: var(--space-3);
+  background: var(--color-primary-bg);
+  border: 2px solid var(--color-primary);
+  border-radius: 0;
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}

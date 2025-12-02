@@ -1,0 +1,91 @@
+/* Page content entrance animations */
+
+.fadeIn {
+  animation: fadeIn 400ms var(--ease-out, cubic-bezier(0.0, 0, 0.2, 1)) forwards;
+}
+
+.slideUp {
+  animation: slideUp 450ms var(--ease-out, cubic-bezier(0.0, 0, 0.2, 1)) forwards;
+}
+
+.slideUpDelay1 {
+  animation: slideUp 450ms var(--ease-out) 50ms forwards;
+  opacity: 0;
+}
+
+.slideUpDelay2 {
+  animation: slideUp 450ms var(--ease-out) 100ms forwards;
+  opacity: 0;
+}
+
+.slideUpDelay3 {
+  animation: slideUp 450ms var(--ease-out) 150ms forwards;
+  opacity: 0;
+}
+
+.slideUpDelay4 {
+  animation: slideUp 450ms var(--ease-out) 200ms forwards;
+  opacity: 0;
+}
+
+.scaleIn {
+  animation: scaleIn 400ms var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
+}
+
+.scaleInDelay1 {
+  animation: scaleIn 400ms var(--ease-spring) 80ms forwards;
+  opacity: 0;
+}
+
+.scaleInDelay2 {
+  animation: scaleIn 400ms var(--ease-spring) 160ms forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .fadeIn,
+  .slideUp,
+  .slideUpDelay1,
+  .slideUpDelay2,
+  .slideUpDelay3,
+  .slideUpDelay4,
+  .scaleIn,
+  .scaleInDelay1,
+  .scaleInDelay2 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

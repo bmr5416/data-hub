@@ -1,0 +1,260 @@
+.container {
+  padding: var(--space-4);
+}
+
+.header {
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.description {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.step {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-bg-secondary);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 700;
+  border-radius: 0;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepContent h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.stepContent p {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+}
+
+.platformDataButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  text-decoration: none;
+  border-radius: 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.platformDataButton:hover {
+  background: var(--color-primary-hover);
+}
+
+.schemaHint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-primary);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.columnList {
+  font-family: var(--font-mono);
+  margin-left: var(--space-2);
+}
+
+.uploadSection {
+  margin-bottom: var(--space-6);
+}
+
+.uploadsSection {
+  margin-bottom: var(--space-4);
+}
+
+.previewSection {
+  margin-bottom: var(--space-4);
+}
+
+.uploadsTitle {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.uploadsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.uploadItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-primary);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+}
+
+.uploadInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.uploadFilename {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.uploadMeta {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.deleteButton:hover {
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.deleteButton:active {
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+.validationSuccess,
+.validationError {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: 0;
+  margin-bottom: var(--space-4);
+}
+
+.validationSuccess {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.validationError {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.validationSuccess strong,
+.validationError strong {
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.validationSuccess p,
+.validationError p {
+  margin: 0;
+  color: inherit;
+  opacity: 0.8;
+}
+
+.validationError ul {
+  margin: var(--space-2) 0 0 var(--space-4);
+  padding: 0;
+}
+
+.validationError li {
+  margin-bottom: var(--space-1);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.confirmed {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border-radius: 0;
+  font-weight: 500;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

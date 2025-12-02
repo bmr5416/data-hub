@@ -1,0 +1,108 @@
+/**
+ * Shared CSS Module
+ *
+ * Common styles used across multiple components.
+ * Import selectively to maintain component encapsulation.
+ */
+
+/* ==========================================================================
+   Empty State Styles
+   ========================================================================== */
+
+/**
+ * Standard empty state container for lists/grids with no data
+ *
+ * Usage:
+ *   import sharedStyles from '../../styles/shared.module.css';
+ *   <div className={sharedStyles.emptyState}>No data available</div>
+ */
+.emptyState {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+}
+
+/**
+ * Empty state hint text - smaller secondary text below main message
+ */
+.emptyStateHint {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Status Indicators
+   ========================================================================== */
+
+/**
+ * Inline status indicator with icon + text
+ */
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-sm);
+}
+
+/**
+ * Loading spinner wrapper
+ */
+.loadingWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  gap: var(--space-3);
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+}
+
+/**
+ * Error message container
+ */
+.errorMessage {
+  padding: var(--space-4);
+  color: var(--color-error);
+  font-family: var(--font-ui);
+  text-align: center;
+}
+
+/* ==========================================================================
+   Layout Helpers
+   ========================================================================== */
+
+/**
+ * Flex row with centered items
+ */
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/**
+ * Flex row with items spread apart
+ */
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/**
+ * Standard gap between flex items
+ */
+.gapSm {
+  gap: var(--space-2);
+}
+
+.gapMd {
+  gap: var(--space-4);
+}
+
+.gapLg {
+  gap: var(--space-6);
+}

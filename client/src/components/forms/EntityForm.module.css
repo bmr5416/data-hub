@@ -1,0 +1,121 @@
+/* Shared styles for entity creation forms */
+
+.formOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 150ms ease-out forwards;
+}
+
+.formOverlay.closing {
+  opacity: 1; /* Prevent flash to base state before exit animation */
+  animation: fadeOut 150ms ease-in forwards;
+}
+
+.formModal {
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--space-6);
+  animation: scaleIn 150ms ease-out forwards;
+}
+
+.formModal.closing {
+  opacity: 1; /* Prevent flash to base state before exit animation */
+  transform: scale(1);
+  animation: scaleOut 150ms ease-in forwards;
+}
+
+.formModal h3 {
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  margin-bottom: var(--space-5);
+  font-size: 1.25rem;
+}
+
+.formField {
+  margin-bottom: var(--space-4);
+}
+
+.formField label {
+  display: block;
+  font-family: var(--font-ui);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+  width: 100%;
+  padding: var(--space-3);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  background: var(--win98-form-bg);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}
+
+.formField input:focus,
+.formField select:focus,
+.formField textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  border-top: 2px solid var(--win98-border-dark);
+  padding-top: var(--space-4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}

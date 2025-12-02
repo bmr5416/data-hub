@@ -1,0 +1,129 @@
+/**
+ * MimicChest styles
+ * Treasure chest mimic for minimized Imp state
+ *
+ * Sprite credit: Stephen Challener/Redshrike (CC-BY 3.0)
+ */
+
+.chest {
+  /* Reset button styles */
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+
+  /* Container sizing - matches MIMIC_DISPLAY_SIZE (48px) */
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Instant retro transitions */
+  transition: none;
+}
+
+.spriteContainer {
+  /* Container for the scaled sprite */
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.sprite {
+  /* The actual sprite - will be scaled via inline style */
+  pointer-events: none;
+}
+
+/* Dormant chest - subtle floating animation */
+.chest:not(.animating) {
+  animation: chestFloat 4s ease-in-out infinite;
+}
+
+@keyframes chestFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Hover state - gold glow appears */
+.chest:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.chest:active {
+  transform: scale(0.95);
+}
+
+/* Focus state */
+.chest:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: 0;
+}
+
+/* Peeking state - eyes are visible, extra glow */
+.peeking {
+  filter: drop-shadow(0 0 6px rgba(255, 100, 100, 0.5));
+}
+
+.peeking:hover {
+  filter: drop-shadow(0 0 10px rgba(255, 100, 100, 0.8));
+}
+
+/* During animation - disable float */
+.animating {
+  animation: none !important;
+}
+
+/* Proximity-based glow effect (uses --proximity custom property 0-1) */
+.chest:not(.animating) {
+  filter: drop-shadow(0 0 calc(var(--proximity, 0) * 8px) rgba(255, 215, 0, calc(var(--proximity, 0) * 0.4)));
+}
+
+/* Win98 style base - subtle dungeon stone effect */
+.chest::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.1) 0%,
+    transparent 70%
+  );
+  border-radius: 0;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+.chest:hover::before {
+  opacity: 1;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .chest:not(.animating) {
+    animation: none;
+  }
+
+  .chest:hover {
+    transform: none;
+  }
+
+  .chest:active {
+    transform: none;
+  }
+
+  .peeking {
+    filter: none;
+  }
+}

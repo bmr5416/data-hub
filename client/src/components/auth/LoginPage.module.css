@@ -1,0 +1,194 @@
+/**
+ * LoginPage Styles
+ *
+ * Win98 Dungeon Theme:
+ * - Zero border-radius
+ * - 2px solid borders
+ * - Gold titles with text-shadow
+ * - Inset input borders
+ * - Raised card/button borders
+ */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg-secondary);
+  background-image: var(--texture-main);
+  z-index: -1;
+}
+
+.backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+/* Login Card - Raised Win98 panel */
+.loginCard {
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), var(--shadow-xl);
+  border-radius: 0;
+  width: 100%;
+  max-width: 400px;
+  margin: var(--space-4);
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.lockIcon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--color-primary);
+  text-shadow:
+    0 0 10px rgba(255, 215, 0, 0.5),
+    2px 2px 0 var(--win98-border-dark);
+  margin: 0;
+  text-align: center;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Error Banner */
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-error-bg);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  margin: var(--space-4) var(--space-4) 0;
+}
+
+.errorText {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}
+
+/* Form */
+.form {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* Input - Inset Win98 style */
+.input {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  padding: var(--space-3);
+  background: var(--win98-form-bg);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  transition: background-color 150ms;
+}
+
+.input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.input:focus {
+  outline: none;
+  background: var(--win98-form-bg-focus);
+  border-color: var(--color-primary) var(--win98-border-light) var(--win98-border-light) var(--color-primary);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Submit Button */
+.submitButton {
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* Footer */
+.footer {
+  padding: var(--space-4) var(--space-5);
+  border-top: 2px solid var(--win98-border-dark);
+  text-align: center;
+}
+
+.footerText {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .loginCard {
+    margin: var(--space-3);
+  }
+
+  .header {
+    padding: var(--space-4) var(--space-4) var(--space-3);
+  }
+
+  .form {
+    padding: var(--space-4);
+  }
+
+  .title {
+    font-size: var(--text-lg);
+  }
+}

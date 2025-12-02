@@ -1,0 +1,6 @@
+date_start,campaign_name,campaign_id,adset_name,impressions,clicks,spend,conversions,custom_field_1,custom_field_2,unexpected_metric,random_dimension,extra_data
+2024-01-15,Q1 Brand Campaign,100001,Target Audience,45000,1350,675.00,45,value1,data1,123.45,category_a,extra_value_1
+2024-01-16,Spring Promo,100002,Cold Audiences,52000,1560,780.00,52,value2,data2,234.56,category_b,extra_value_2
+2024-01-17,Summer Sale,100003,Warm Leads,48000,1440,720.00,48,value3,data3,345.67,category_c,extra_value_3
+2024-01-18,Fall Collection,100004,Retargeting,55000,1650,825.00,55,value4,data4,456.78,category_d,extra_value_4
+2024-01-19,Holiday Special,100005,VIP Customers,62000,1860,930.00,62,value5,data5,567.89,category_e,extra_value_5

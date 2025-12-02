@@ -1,0 +1,120 @@
+/**
+ * Imp container styles
+ * Fixed position in bottom-right corner
+ */
+
+.container {
+  /* Fixed positioning */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  /* Flexbox for balloon + sprite layout */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+
+  /* Prevent text selection */
+  user-select: none;
+
+  /* Pointer events only on children */
+  pointer-events: none;
+}
+
+.container > * {
+  pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+/* When sidebar is open, ensure Imp doesn't overlap content too much */
+@media (max-width: 1024px) {
+  .container {
+    bottom: 80px; /* Above any floating buttons */
+  }
+}
+
+/* Print - hide Imp */
+@media print {
+  .container {
+    display: none;
+  }
+}
+
+/* Dormant state - sleeping Imp */
+.dormant {
+  /* Slightly dimmed when sleeping */
+  opacity: 0.85;
+  transition: opacity var(--transition-base);
+}
+
+.dormant:hover {
+  /* Brighten on hover to indicate interactivity */
+  opacity: 1;
+}
+
+/* Transition animations for Imp ↔ Mimic chest */
+.transitioning {
+  pointer-events: none;
+}
+
+/* Fade in animation for chest appearing */
+@keyframes chestAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fade in animation for Imp appearing from chest */
+@keyframes impAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shrink animation for Imp going into chest */
+@keyframes impShrink {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Apply to children when transitioning */
+.transitioning > * {
+  animation: impAppear 0.4s ease-out forwards;
+}

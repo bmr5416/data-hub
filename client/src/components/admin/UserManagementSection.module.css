@@ -1,0 +1,374 @@
+/**
+ * UserManagementSection Styles
+ *
+ * Win98 Dungeon Theme:
+ * - Zero border-radius
+ * - 2px solid borders
+ * - Semantic tokens only
+ */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sectionTitle h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 var(--win98-border-dark);
+  margin: 0;
+}
+
+.sectionDescription {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Error Banner */
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-error-bg);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  color: var(--color-error);
+}
+
+.errorBanner span {
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  background: var(--win98-form-bg);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  padding: 0 var(--space-3);
+}
+
+.searchIcon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  padding: var(--space-2) 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.filterLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.filterSelect {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  background: var(--win98-form-bg);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.filterSelect:focus {
+  outline: none;
+  background: var(--win98-form-bg-focus);
+}
+
+/* Empty State */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.empty p {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  margin: 0;
+}
+
+/* User List */
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* User Card */
+.userCard {
+  padding: var(--space-4);
+}
+
+.userHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.userAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 2px solid;
+  border-color: var(--win98-border-light);
+  border-radius: 0;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-tertiary);
+  border: 2px solid;
+  border-color: var(--win98-border-light);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.userEmail {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.userBadges {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.adminBadge,
+.youBadge,
+.inactiveBadge,
+.pendingBadge {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  border: 2px solid;
+  border-radius: 0;
+}
+
+.adminBadge {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.youBadge {
+  background: var(--color-info-light);
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+.inactiveBadge {
+  background: var(--color-error-bg);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.pendingBadge {
+  background: var(--color-warning-light);
+  border-color: var(--color-warning);
+  color: var(--color-warning-text);
+}
+
+/* Client List */
+.clientList {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--win98-border-dark);
+}
+
+.clientLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.clientBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-tertiary);
+  border: 2px solid;
+  border-color: var(--win98-border-light);
+  border-radius: 0;
+  color: var(--color-text-primary);
+}
+
+.roleBadge {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  padding: 2px 4px;
+  background: var(--color-bg-secondary);
+  border-radius: 0;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.moreClients {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* User Actions */
+.userActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--win98-border-dark);
+}
+
+/* Delete Confirmation */
+.deleteConfirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.deleteConfirm p {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.deleteWarning {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.deleteActions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchBox {
+    max-width: none;
+  }
+
+  .filterGroup {
+    justify-content: flex-end;
+  }
+
+  .userHeader {
+    flex-wrap: wrap;
+  }
+
+  .userBadges {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: var(--space-2);
+  }
+}

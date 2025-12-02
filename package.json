@@ -1,0 +1,64 @@
+{
+  "name": "data-hub",
+  "version": "1.0.0",
+  "description": "Internal tool documenting ad agency clients' reporting processes, ETL flows, KPIs, and data sources",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=client",
+    "start": "npm run start --workspace=server",
+    "lint": "eslint . --ext .js,.jsx",
+    "format": "prettier --write \"**/*.{js,jsx,json,css,md}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:component": "vitest run tests/component",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:ci": "vitest run --coverage && playwright test --reporter=github",
+    "record:demo": "node scripts/record-demo.js",
+    "record:demo:setup": "node scripts/setup-demo-data.js",
+    "video:setup": "node scripts/setup-demo-data.js",
+    "video:record": "node scripts/record-demo.js",
+    "video:compile": "node scripts/compile-demo.js",
+    "video:generate": "node scripts/generate-video.js"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.1.0",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.1",
+    "@vitest/coverage-v8": "^4.0.15",
+    "@vitest/ui": "^4.0.15",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "is-ci": "^4.1.0",
+    "nock": "^14.0.10",
+    "prettier": "^3.2.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8",
+    "jsonwebtoken": "^9.0.3",
+    "luxon": "^3.7.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.11",
+    "papaparse": "^5.5.3",
+    "recharts": "^3.5.1"
+  }
+}

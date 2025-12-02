@@ -1,0 +1,178 @@
+/**
+ * VideoPlayer Styles
+ *
+ * Win98 Dungeon themed video player:
+ * - Zero border-radius
+ * - 2px solid borders
+ * - Semantic tokens only
+ */
+
+.container {
+  width: 100%;
+  max-width: 900px;
+}
+
+.videoWrapper {
+  position: relative;
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: var(--color-bg-secondary);
+}
+
+/* Loading overlay */
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background: var(--color-bg-secondary);
+  opacity: 0.95;
+  z-index: 10;
+}
+
+.loadingText {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Error overlay */
+.errorOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background: var(--color-bg-primary);
+  z-index: 10;
+}
+
+.errorText {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-error);
+  margin: 0;
+}
+
+/* Poster overlay */
+.posterOverlay {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  z-index: 5;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Win98 aesthetic: instant interactions */
+}
+
+.posterOverlay:hover .playButton {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.posterOverlay:active .playButton {
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.playIcon {
+  font-size: 32px;
+  color: var(--color-primary);
+  margin-left: 4px; /* Visual centering for play triangle */
+}
+
+/* Title bar */
+.titleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-top: none;
+  border-color: var(--win98-raised-border);
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* Fallback message */
+.fallback {
+  padding: var(--space-4);
+  text-align: center;
+  font-family: var(--font-family);
+  color: var(--color-text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .playButton {
+    width: 60px;
+    height: 60px;
+  }
+
+  .playIcon {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .playButton {
+    width: 48px;
+    height: 48px;
+  }
+
+  .playIcon {
+    font-size: 20px;
+  }
+
+  .titleBar {
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .title {
+    font-size: var(--text-xs);
+  }
+}

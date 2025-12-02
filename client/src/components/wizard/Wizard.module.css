@@ -1,0 +1,57 @@
+/* Container - layout only, no card styling */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header - outside card, on page background */
+.header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-2);
+}
+
+.subtitle {
+  font-size: var(--text-base);
+  font-family: var(--font-ui);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Card wrapper for wizard content */
+.wizardCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  border-radius: 0;
+}
+
+/* Step content area */
+.content {
+  flex: 1;
+  padding: var(--space-4) var(--space-6);
+  overflow-y: auto;
+}
+
+/* Error message */
+.error {
+  margin: 0 var(--space-6) var(--space-4);
+  padding: var(--space-4);
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  color: var(--color-red-400);
+  font-size: var(--text-sm);
+  font-family: var(--font-family);
+}

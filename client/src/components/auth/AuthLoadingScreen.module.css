@@ -1,0 +1,45 @@
+/**
+ * AuthLoadingScreen Styles
+ *
+ * Win98 Dungeon Theme full-screen loader
+ */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg-secondary);
+  background-image: var(--texture-main);
+  z-index: -1;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.text {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}

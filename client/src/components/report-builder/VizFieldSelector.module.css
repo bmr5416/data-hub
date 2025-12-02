@@ -1,0 +1,132 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.loading,
+.empty {
+  padding: var(--space-4);
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.count {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--win98-border-dark);
+  border-radius: 0;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+/* Field List */
+.fieldList {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--space-2);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+/* Category Grouping */
+.category {
+  margin-bottom: var(--space-3);
+}
+
+.category:last-child {
+  margin-bottom: 0;
+}
+
+.categoryLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+  padding-bottom: var(--space-1);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.categoryFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Flat List */
+.flatList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Field Item */
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: 0;
+  cursor: pointer;
+  transition: none;
+}
+
+.field:hover {
+  background: var(--color-bg-secondary);
+}
+
+.field.selected {
+  background: var(--color-info-light);
+  border: 2px solid var(--color-primary);
+  margin: -2px;
+}
+
+.input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.fieldName {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  flex: 1;
+}

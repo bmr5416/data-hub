@@ -1,0 +1,125 @@
+/* AddClientModal - Content styles (Modal handled by base Modal component) */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.form {
+  padding: var(--space-5);
+}
+
+.field {
+  margin-bottom: var(--space-4);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.field label {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  background: var(--win98-form-bg);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.textareaWrapper {
+  position: relative;
+}
+
+.charCount {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  background: var(--win98-form-bg);
+  padding: 0 var(--space-1);
+}
+
+.charCountWarning {
+  color: var(--color-warning);
+  font-weight: 600;
+}
+
+.fieldError input,
+.fieldError select,
+.fieldError textarea {
+  border-color: var(--color-error);
+}
+
+.fieldErrorText {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-error);
+  font-size: var(--text-sm);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--color-error-bg);
+  border: 2px solid var(--color-error);
+  border-radius: 0;
+  color: var(--color-error);
+  font-size: var(--text-sm);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--win98-border-dark);
+  margin-top: var(--space-4);
+}

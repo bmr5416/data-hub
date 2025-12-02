@@ -1,0 +1,55 @@
+date_start,campaign_name,campaign_id,adset_name,adset_id,ad_name,ad_id,publisher_platform,impressions,link_clicks,spend,conversions
+2024-01-15,Q1 Brand Awareness,100001,Lookalike Audiences,200001,Video Ad 1,300001,facebook,45230,1245,2150.50,42
+2024-01-15,Q1 Brand Awareness,100001,Lookalike Audiences,200001,Video Ad 1,300001,instagram,38750,980,1820.25,35
+2024-01-16,Q1 Brand Awareness,100001,Interest Targeting,200002,Carousel Ad 1,300002,facebook,52100,1580,2450.75,58
+2024-01-16,Q1 Brand Awareness,100001,Interest Targeting,200002,Carousel Ad 1,300002,instagram,41200,1120,1950.00,45
+2024-01-17,Q1 Brand Awareness,100001,Retargeting,200003,Static Image 1,300003,facebook,28500,890,1250.25,32
+2024-01-17,Q1 Brand Awareness,100001,Retargeting,200003,Static Image 1,300003,instagram,22100,650,980.50,28
+2024-02-01,Spring Sale Campaign,100002,Cold Audiences,200004,Promo Video,300004,facebook,68400,2150,3250.00,85
+2024-02-01,Spring Sale Campaign,100002,Cold Audiences,200004,Promo Video,300004,instagram,55200,1780,2680.25,72
+2024-02-02,Spring Sale Campaign,100002,Website Visitors,200005,Flash Sale Ad,300005,facebook,42500,1350,2100.50,55
+2024-02-02,Spring Sale Campaign,100002,Website Visitors,200005,Flash Sale Ad,300005,instagram,35800,1080,1750.75,48
+2024-02-15,Spring Sale Campaign,100002,Cart Abandoners,200006,Reminder Ad,300006,facebook,18200,520,850.25,22
+2024-02-15,Spring Sale Campaign,100002,Cart Abandoners,200006,Reminder Ad,300006,instagram,14500,380,650.50,18
+2024-03-01,Q1 Conversion Push,100003,High Intent,200007,CTA Video,300007,facebook,75200,2450,3850.00,95
+2024-03-01,Q1 Conversion Push,100003,High Intent,200007,CTA Video,300007,instagram,62500,2100,3200.25,82
+2024-03-10,Q1 Conversion Push,100003,Engaged Users,200008,Testimonial Ad,300008,facebook,48500,1650,2550.50,65
+2024-03-10,Q1 Conversion Push,100003,Engaged Users,200008,Testimonial Ad,300008,instagram,41200,1380,2150.75,55
+2024-04-01,Easter Campaign,100004,Seasonal Audiences,200009,Holiday Special,300009,facebook,82500,2850,4250.00,110
+2024-04-01,Easter Campaign,100004,Seasonal Audiences,200009,Holiday Special,300009,instagram,68200,2350,3550.25,92
+2024-04-05,Easter Campaign,100004,Family Audiences,200010,Family Bundle Ad,300010,facebook,55800,1920,2850.50,75
+2024-04-05,Easter Campaign,100004,Family Audiences,200010,Family Bundle Ad,300010,instagram,46500,1580,2380.75,62
+2024-05-01,Summer Preview,100005,Warm Weather Interests,200011,Beach Collection,300011,facebook,92500,3150,4850.00,125
+2024-05-01,Summer Preview,100005,Warm Weather Interests,200011,Beach Collection,300011,instagram,78200,2680,4050.25,105
+2024-05-15,Summer Preview,100005,Outdoor Enthusiasts,200012,Adventure Gear,300012,facebook,68500,2350,3550.50,88
+2024-05-15,Summer Preview,100005,Outdoor Enthusiasts,200012,Adventure Gear,300012,instagram,55200,1920,2850.75,72
+2024-06-01,Mid-Year Sale,100006,VIP Customers,200013,Exclusive Offer,300013,facebook,45200,1580,2350.00,62
+2024-06-01,Mid-Year Sale,100006,VIP Customers,200013,Exclusive Offer,300013,instagram,38500,1280,1980.25,52
+2024-06-15,Mid-Year Sale,100006,Email Subscribers,200014,Newsletter Special,300014,facebook,52800,1850,2750.50,72
+2024-06-15,Mid-Year Sale,100006,Email Subscribers,200014,Newsletter Special,300014,instagram,44200,1520,2280.75,60
+2024-07-01,July Fourth Promo,100007,Patriotic Themes,200015,Independence Day,300015,facebook,98500,3450,5250.00,138
+2024-07-01,July Fourth Promo,100007,Patriotic Themes,200015,Independence Day,300015,instagram,82500,2880,4350.25,115
+2024-07-04,July Fourth Promo,100007,BBQ Enthusiasts,200016,Grill Masters,300016,facebook,75200,2650,3950.50,98
+2024-07-04,July Fourth Promo,100007,BBQ Enthusiasts,200016,Grill Masters,300016,instagram,62500,2180,3280.75,82
+2024-08-01,Back to School,100008,Parents,200017,School Supplies,300017,facebook,105200,3750,5650.00,148
+2024-08-01,Back to School,100008,Parents,200017,School Supplies,300017,instagram,88500,3150,4750.25,125
+2024-08-15,Back to School,100008,College Students,200018,Dorm Essentials,300018,facebook,78500,2780,4150.50,105
+2024-08-15,Back to School,100008,College Students,200018,Dorm Essentials,300018,instagram,65200,2320,3450.75,88
+2024-09-01,Fall Collection,100009,Fashion Forward,200019,Autumn Styles,300019,facebook,68500,2450,3650.00,92
+2024-09-01,Fall Collection,100009,Fashion Forward,200019,Autumn Styles,300019,instagram,55200,1980,2950.25,75
+2024-09-15,Fall Collection,100009,Cozy Home,200020,Home Decor,300020,facebook,52800,1880,2800.50,70
+2024-09-15,Fall Collection,100009,Cozy Home,200020,Home Decor,300020,instagram,44500,1580,2350.75,58
+2024-10-01,Halloween Special,100010,Costume Lovers,200021,Spooky Deals,300021,facebook,112500,4050,6150.00,162
+2024-10-01,Halloween Special,100010,Costume Lovers,200021,Spooky Deals,300021,instagram,95200,3420,5180.25,138
+2024-10-15,Halloween Special,100010,Party Planners,200022,Party Supplies,300022,facebook,82500,2980,4450.50,118
+2024-10-15,Halloween Special,100010,Party Planners,200022,Party Supplies,300022,instagram,68500,2480,3700.75,98
+2024-11-01,Black Friday Prep,100011,Deal Seekers,200023,Early Access,300023,facebook,125200,4520,6850.00,178
+2024-11-01,Black Friday Prep,100011,Deal Seekers,200023,Early Access,300023,instagram,105500,3820,5750.25,150
+2024-11-15,Black Friday,100011,Hot Deals,200024,Doorbuster,300024,facebook,185200,6850,10250.00,275
+2024-11-15,Black Friday,100011,Hot Deals,200024,Doorbuster,300024,instagram,158500,5850,8750.25,235
+2024-11-29,Cyber Monday,100012,Online Shoppers,200025,Digital Deals,300025,facebook,165200,6150,9250.00,248
+2024-11-29,Cyber Monday,100012,Online Shoppers,200025,Digital Deals,300025,instagram,142500,5280,7950.25,212
+2024-12-01,Holiday Campaign,100013,Gift Givers,200026,Perfect Gifts,300026,facebook,135200,4980,7450.00,198
+2024-12-01,Holiday Campaign,100013,Gift Givers,200026,Perfect Gifts,300026,instagram,115500,4250,6350.25,168
+2024-12-04,Holiday Campaign,100013,Last Minute,200027,Rush Delivery,300027,facebook,98500,3650,5450.50,145
+2024-12-04,Holiday Campaign,100013,Last Minute,200027,Rush Delivery,300027,instagram,82500,3050,4550.75,122

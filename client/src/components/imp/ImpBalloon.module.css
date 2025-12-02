@@ -1,0 +1,243 @@
+/**
+ * ImpBalloon styles - Single source of truth for Imp speech bubble
+ *
+ * Win98 Dungeon theme compliant - NO rounded corners
+ * Uses design tokens from index.css
+ */
+
+.balloon {
+  /* Win98 dungeon background */
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  color: var(--color-text-primary);
+  padding: 0;
+
+  /* Win98 raised border - NO rounded corners */
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), var(--shadow-md);
+  border-radius: 0;
+
+  /* Size constraints */
+  max-width: 220px;
+  min-width: 140px;
+
+  /* Positioning */
+  position: absolute;
+  z-index: 1001;
+
+  /* Animation */
+  opacity: 0;
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header bar - Win98 style */
+.header {
+  background: linear-gradient(90deg, var(--color-bg-secondary), var(--color-gray-200));
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: bold;
+  padding: var(--space-1) var(--space-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0;
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.title {
+  flex: 1;
+  padding-left: var(--space-1);
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Win98 dismiss button */
+.dismissButton {
+  background: var(--color-button-bg);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-weight: bold;
+  width: 16px;
+  height: 14px;
+  line-height: 10px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+.dismissButton:hover {
+  background: var(--color-button-hover);
+  color: var(--color-primary);
+}
+
+.dismissButton:active {
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+.dismissButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+/* Content area */
+.content {
+  padding: var(--space-2);
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+
+/* Blinking cursor during typing */
+.cursor {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  background: var(--color-primary);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Tip pointer - Win98 styled */
+.tip {
+  width: 0;
+  height: 0;
+  position: absolute;
+  /* CSS triangle for Win98 look */
+  border-style: solid;
+}
+
+/* Position variants for tip pointer */
+
+/* Top-left: balloon above and to the left of sprite */
+.top-left {
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 12px;
+}
+
+.top-left .tip {
+  top: 100%;
+  left: calc(100% - 40px);
+  border-width: 12px 8px 0 8px;
+  border-color: var(--win98-border-light) transparent transparent transparent;
+}
+
+/* Top-right: balloon above and to the right of sprite */
+.top-right {
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 12px;
+}
+
+.top-right .tip {
+  top: 100%;
+  left: 40px;
+  border-width: 12px 8px 0 8px;
+  border-color: var(--win98-border-light) transparent transparent transparent;
+}
+
+/* Bottom-left: balloon below and to the left of sprite */
+.bottom-left {
+  top: 100%;
+  right: 0;
+  margin-top: 12px;
+}
+
+.bottom-left .tip {
+  bottom: 100%;
+  left: calc(100% - 40px);
+  border-width: 0 8px 12px 8px;
+  border-color: transparent transparent var(--win98-border-light) transparent;
+}
+
+/* Bottom-right: balloon below and to the right of sprite */
+.bottom-right {
+  top: 100%;
+  left: 0;
+  margin-top: 12px;
+}
+
+.bottom-right .tip {
+  bottom: 100%;
+  left: 40px;
+  border-width: 0 8px 12px 8px;
+  border-color: transparent transparent var(--win98-border-light) transparent;
+}
+
+/* Notification type header variants */
+.headerError {
+  background: linear-gradient(90deg, var(--color-error), var(--color-error-dark));
+}
+
+.headerError .title {
+  color: var(--color-text-primary);
+}
+
+.headerSuccess {
+  background: linear-gradient(90deg, var(--color-success), var(--color-success-dark));
+}
+
+.headerSuccess .title {
+  color: var(--color-text-primary);
+}
+
+.headerWarning {
+  background: linear-gradient(90deg, var(--color-warning), var(--color-warning-dark));
+}
+
+.headerWarning .title {
+  color: var(--color-bg-primary);
+}
+
+.headerInfo {
+  background: linear-gradient(90deg, var(--color-info), var(--color-info-dark));
+}
+
+.headerInfo .title {
+  color: var(--color-text-primary);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .balloon {
+    animation: none;
+    opacity: 1;
+  }
+
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+}

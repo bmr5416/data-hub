@@ -1,0 +1,150 @@
+/* FormField - Win98 dungeon themed form field with validation */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.field.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Label */
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.required {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+/* Input wrapper */
+.inputWrapper {
+  position: relative;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--win98-form-bg);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  transition: border-color var(--transition-fast);
+}
+
+.input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.input:hover:not(:focus):not(:disabled) {
+  border-color: var(--win98-border-light);
+}
+
+/* Textarea specific */
+textarea.input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Select specific */
+select.input {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFD700' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-8);
+}
+
+/* Error state */
+.hasError .input,
+.inputError {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+
+.hasError .input:focus,
+.inputError:focus {
+  border-color: var(--color-error);
+  box-shadow: var(--win98-inset-shadow), 0 0 0 2px var(--color-error-light);
+}
+
+/* Character count */
+.charCount {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  background: var(--win98-form-bg);
+  padding: 0 var(--space-1);
+}
+
+.charCountError {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+/* Hint text */
+.hint {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Error message */
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.error::before {
+  content: "!";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: var(--color-error);
+  color: white;
+  font-weight: 700;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* Focus visible for keyboard navigation */
+.input:focus-visible {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: 2px;
+}

@@ -1,0 +1,145 @@
+/* Modal overlay and container */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay-bg, rgba(0, 0, 0, 0.6));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--modal-z-index, 100);
+  opacity: 0;
+  animation: fadeIn var(--modal-animation-in, 200ms) var(--ease-out) forwards;
+  /* Padding ensures modal never touches screen edges */
+  padding: var(--space-4);
+}
+
+.overlay.closing {
+  opacity: 1; /* Prevent flash to base state before exit animation */
+  animation: fadeOut var(--modal-animation-out, 150ms) var(--ease-in) forwards;
+}
+
+.modal {
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), var(--shadow-lg);
+  width: 100%;
+  max-width: var(--modal-size-md, 500px);
+  max-height: var(--modal-max-height, 90vh);
+  overflow-y: auto;
+  opacity: 0;
+  transform: scale(0.95) translateY(10px);
+  animation: scaleIn 250ms var(--ease-spring) 50ms forwards;
+}
+
+.modal.closing {
+  opacity: 1; /* Prevent flash to base state before exit animation */
+  transform: scale(1) translateY(0);
+  animation: scaleOut var(--modal-animation-out, 150ms) var(--ease-in) forwards;
+}
+
+/*
+ * Size variants - UX Best Practices:
+ * - No min-width to prevent horizontal overflow on small screens
+ * - max-width constrains size on large screens for optimal line length
+ * - width: 100% fills available space within overlay padding constraints
+ * - Overlay provides consistent margins from screen edges
+ */
+.modal.xs {
+  max-width: var(--modal-size-xs, 320px);
+}
+
+.modal.sm {
+  max-width: var(--modal-size-sm, 400px);
+}
+
+.modal.md {
+  max-width: var(--modal-size-md, 500px);
+}
+
+.modal.lg {
+  max-width: var(--modal-size-lg, 700px);
+}
+
+.modal.xl {
+  max-width: var(--modal-size-xl, 900px);
+}
+
+.modal.\32xl {
+  max-width: var(--modal-size-2xl, 1100px);
+}
+
+.modal.full {
+  max-width: var(--modal-size-full, 1400px);
+  max-height: calc(100vh - var(--space-4) * 2);
+}
+
+/* Wizard-specific sizing (contains wizard content) */
+.modal.wizard {
+  max-width: 900px;
+  padding: var(--space-6);
+  background: var(--color-bg-secondary);
+  background-image: var(--texture-main);
+}
+
+/* Tablet and smaller - modals use more of available screen */
+@media (max-width: 768px) {
+  .modal.wizard {
+    padding: var(--space-4);
+  }
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .overlay.closing,
+  .modal,
+  .modal.closing {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

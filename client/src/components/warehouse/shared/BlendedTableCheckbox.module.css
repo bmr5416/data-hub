@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  appearance: none;
+  background: var(--win98-form-bg);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox input[type="checkbox"]:checked {
+  background: var(--color-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231A1008' d='M10 3L5 8 2 5l1-1 2 2 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.label {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+.helpText {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+  padding-left: calc(16px + var(--space-2));
+}

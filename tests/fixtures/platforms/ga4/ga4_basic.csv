@@ -1,0 +1,51 @@
+date,sessionCampaignName,sessionSource,sessionMedium,deviceCategory,country,sessions,activeUsers,screenPageViews,bounceRate,conversions,totalRevenue
+20240115,Q1 Organic Push,google,organic,mobile,United States,15000,12500,45000,0.35,450,22500.00
+20240115,Q1 Organic Push,google,organic,desktop,United States,22500,18750,67500,0.28,675,33750.00
+20240116,Q1 Paid Campaign,google,cpc,mobile,United States,8500,7225,25500,0.42,255,12750.00
+20240116,Q1 Paid Campaign,google,cpc,desktop,United States,12750,10838,38250,0.35,383,19125.00
+20240201,Spring Email Campaign,email,newsletter,mobile,United States,5200,4420,15600,0.38,156,7800.00
+20240201,Spring Email Campaign,email,newsletter,desktop,United States,7800,6630,23400,0.32,234,11700.00
+20240215,Social Media Push,facebook,social,mobile,United States,12500,10625,37500,0.45,375,18750.00
+20240215,Social Media Push,facebook,social,desktop,United States,8750,7438,26250,0.38,263,13125.00
+20240301,Q1 Referral,partner_site,referral,mobile,United States,6500,5525,19500,0.40,195,9750.00
+20240301,Q1 Referral,partner_site,referral,desktop,United States,9750,8288,29250,0.33,293,14625.00
+20240315,Direct Traffic,(direct),(none),mobile,United States,18500,15725,55500,0.32,555,27750.00
+20240315,Direct Traffic,(direct),(none),desktop,United States,27750,23588,83250,0.25,833,41625.00
+20240401,Easter Campaign,google,cpc,mobile,United States,14500,12325,43500,0.38,435,21750.00
+20240401,Easter Campaign,google,cpc,desktop,United States,21750,18488,65250,0.30,653,32625.00
+20240415,Spring Social,instagram,social,mobile,United States,16500,14025,49500,0.42,495,24750.00
+20240415,Spring Social,instagram,social,desktop,United States,8250,7013,24750,0.35,248,12375.00
+20240501,Summer Launch,google,organic,mobile,United States,19500,16575,58500,0.33,585,29250.00
+20240501,Summer Launch,google,organic,desktop,United States,29250,24863,87750,0.26,878,43875.00
+20240515,Outdoor Campaign,pinterest,social,mobile,United States,8500,7225,25500,0.45,255,12750.00
+20240515,Outdoor Campaign,pinterest,social,desktop,United States,5750,4888,17250,0.38,173,8625.00
+20240601,Mid-Year Sale,google,cpc,mobile,United States,22500,19125,67500,0.35,675,33750.00
+20240601,Mid-Year Sale,google,cpc,desktop,United States,33750,28688,101250,0.28,1013,50625.00
+20240615,Email Blast,email,promo,mobile,United States,9500,8075,28500,0.38,285,14250.00
+20240615,Email Blast,email,promo,desktop,United States,14250,12113,42750,0.30,428,21375.00
+20240701,July 4th Campaign,google,cpc,mobile,United States,28500,24225,85500,0.32,855,42750.00
+20240701,July 4th Campaign,google,cpc,desktop,United States,42750,36338,128250,0.25,1283,64125.00
+20240704,Holiday Organic,google,organic,mobile,United States,35500,30175,106500,0.30,1065,53250.00
+20240704,Holiday Organic,google,organic,desktop,United States,53250,45263,159750,0.23,1598,79875.00
+20240801,Back to School,google,cpc,mobile,United States,32500,27625,97500,0.33,975,48750.00
+20240801,Back to School,google,cpc,desktop,United States,48750,41438,146250,0.26,1463,73125.00
+20240815,College Campaign,tiktok,social,mobile,United States,18500,15725,55500,0.45,555,27750.00
+20240815,College Campaign,tiktok,social,desktop,United States,6500,5525,19500,0.38,195,9750.00
+20240901,Fall Launch,google,organic,mobile,United States,24500,20825,73500,0.34,735,36750.00
+20240901,Fall Launch,google,organic,desktop,United States,36750,31238,110250,0.27,1103,55125.00
+20240915,Autumn Social,facebook,social,mobile,United States,14500,12325,43500,0.42,435,21750.00
+20240915,Autumn Social,facebook,social,desktop,United States,10875,9244,32625,0.35,326,16312.50
+20241001,Halloween Push,google,cpc,mobile,United States,38500,32725,115500,0.32,1155,57750.00
+20241001,Halloween Push,google,cpc,desktop,United States,57750,49088,173250,0.25,1733,86625.00
+20241015,Costume Campaign,instagram,social,mobile,United States,22500,19125,67500,0.40,675,33750.00
+20241015,Costume Campaign,instagram,social,desktop,United States,11250,9563,33750,0.33,338,16875.00
+20241101,Black Friday Prep,google,cpc,mobile,United States,45500,38675,136500,0.30,1365,68250.00
+20241101,Black Friday Prep,google,cpc,desktop,United States,68250,58013,204750,0.23,2048,102375.00
+20241115,Black Friday,google,cpc,mobile,United States,75500,64175,226500,0.28,2265,113250.00
+20241115,Black Friday,google,cpc,desktop,United States,113250,96263,339750,0.21,3398,169875.00
+20241129,Cyber Monday,google,cpc,mobile,United States,65500,55675,196500,0.29,1965,98250.00
+20241129,Cyber Monday,google,cpc,desktop,United States,98250,83513,294750,0.22,2948,147375.00
+20241201,Holiday Campaign,google,organic,mobile,United States,52500,44625,157500,0.31,1575,78750.00
+20241201,Holiday Campaign,google,organic,desktop,United States,78750,66938,236250,0.24,2363,118125.00
+20241204,Gift Guide Traffic,(direct),(none),mobile,United States,42500,36125,127500,0.33,1275,63750.00
+20241204,Gift Guide Traffic,(direct),(none),desktop,United States,63750,54188,191250,0.26,1913,95625.00

@@ -1,0 +1,685 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 400px;
+  position: relative;
+  padding: var(--space-5);
+}
+
+/* Header Actions */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.nameInput {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.nameInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 2px solid var(--win98-border-dark);
+  padding-bottom: var(--space-1);
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tab:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text-primary);
+}
+
+.tab.activeTab {
+  background: var(--color-bg-primary);
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+  color: var(--color-primary);
+}
+
+/* Tab Content */
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Overview Tab */
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.statLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.infoCard {
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+}
+
+.infoRow:not(:last-child) {
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.infoLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.infoValue {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+/* Visualizations Tab */
+.visualizations {
+  padding: var(--space-2) 0;
+}
+
+.vizGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.vizItem {
+  min-height: 120px;
+}
+
+.chartPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 100%;
+  min-height: 120px;
+  text-align: center;
+  color: var(--color-text-muted);
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.chartTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.chartType {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+}
+
+/* Schedule Tab */
+.schedule {
+  padding: var(--space-2) 0;
+}
+
+.scheduleCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  margin: 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.scheduleInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Delivery Tab */
+.delivery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.deliveryCard,
+.recipientsCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.sendSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.testEmailRow {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.emailInput {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.emailInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.sendResult {
+  padding: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  border: 2px solid;
+  border-radius: 0;
+}
+
+.sendResult.success {
+  background: var(--color-success-bg);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.sendResult.error {
+  background: var(--color-error-bg);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.recipientsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.recipient {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* Alerts Tab */
+.alerts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.alertsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.alertForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);  /* 8px - proper label-input association */
+}
+
+.formField label {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.formField input,
+.formField select {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.formField input:focus,
+.formField select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.formRow {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.formRow .formField {
+  flex: 1;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--win98-border-dark);
+}
+
+.alertsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alertItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0;
+  background-image: var(--texture-card);
+}
+
+.alertInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.alertHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.alertType {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.alertConfig {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.alertActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.emptyHint {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* Visualization Add Buttons */
+.vizAddButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+/* Visualization Item */
+.vizPreview {
+  flex: 1;
+}
+
+.vizItemActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 2px solid var(--win98-border-dark);
+}
+
+/* Visualization Modal */
+/*
+ * Visualization Modal - UX Best Practices:
+ * - Overlay padding creates consistent margin from screen edges
+ * - Modal uses width: 100% to fill available space within constraints
+ * - max-width caps size on large screens for optimal readability
+ * - No min-width to prevent horizontal overflow on small screens
+ * - max-height with internal scroll for overflow content
+ */
+.vizModalOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--modal-overlay-bg);
+  z-index: var(--modal-z-index);
+  /* Padding ensures modal never touches screen edges */
+  padding: var(--space-6);
+}
+
+.vizModal {
+  width: 100%;
+  max-width: 800px;
+  max-height: calc(100vh - var(--space-6) * 2);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Larger modal for charts - more space for data visualization */
+.vizModalLarge {
+  max-width: 1000px;
+}
+
+/* Tablet and smaller - allow modal to use more screen real estate */
+@media (max-width: 900px) {
+  .vizModalOverlay {
+    padding: var(--space-4);
+  }
+
+  .vizModal,
+  .vizModalLarge {
+    max-height: calc(100vh - var(--space-4) * 2);
+  }
+}
+
+/* Mobile - full-width with minimal margins */
+@media (max-width: 480px) {
+  .vizModalOverlay {
+    padding: var(--space-2);
+    align-items: flex-start;
+    padding-top: var(--space-4);
+  }
+
+  .vizModal,
+  .vizModalLarge {
+    max-height: calc(100vh - var(--space-4) - var(--space-2));
+  }
+}
+
+.vizModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid var(--win98-border-dark);
+  background-image: var(--texture-main);
+  flex-shrink: 0;
+}
+
+.vizModalTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  margin: 0;
+}
+
+.vizModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);  /* 24px - clearer section separation */
+  padding: var(--space-4);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.vizModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 2px solid var(--win98-border-dark);
+  background: var(--color-bg-secondary);
+  flex-shrink: 0;
+}
+
+/* Visualization Modal Sections */
+.vizSection {
+  padding: var(--space-4);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  /* Flex layout for consistent internal spacing */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);  /* 16px between form fields */
+}
+
+.vizSectionTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;  /* Parent gap handles spacing */
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+/* Two-column layout for fields */
+.fieldColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 700px) {
+  .fieldColumns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Loading state for sections */
+.sectionLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Form Field Checkbox */
+.formFieldCheckbox {
+  display: flex;
+  align-items: center;
+}
+
+.formFieldCheckbox label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.formFieldCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Form Hint */
+.formHint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Field Error */
+.fieldError {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}
+
+/* Character Count */
+.charCount {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* Loading Overlay */
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-bg-primary) 90%, transparent);
+  z-index: 10;
+}

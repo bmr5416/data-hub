@@ -1,0 +1,109 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 0;
+  font-weight: 500;
+  font-family: var(--font-ui);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 0;
+}
+
+/* Sizes */
+.sm {
+  font-size: 0.75rem;
+  padding: 2px var(--space-2);
+}
+
+.sm .dot {
+  width: 6px;
+  height: 6px;
+}
+
+.md {
+  font-size: 0.875rem;
+}
+
+.lg {
+  font-size: 1rem;
+  padding: var(--space-2) var(--space-4);
+}
+
+/* Colors */
+.gray {
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
+}
+
+.gray .dot {
+  background: var(--color-gray-400);
+}
+
+.blue {
+  background: var(--color-primary-light);
+  color: var(--color-on-primary);
+}
+
+.blue .dot {
+  background: var(--color-primary);
+}
+
+.green {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.green .dot {
+  background: var(--color-success);
+}
+
+.yellow {
+  background: var(--color-warning-light);
+  color: var(--color-on-warning);
+}
+
+.yellow .dot {
+  background: var(--color-warning);
+}
+
+.orange {
+  background: var(--color-attention-light);
+  color: var(--color-on-attention);
+}
+
+.orange .dot {
+  background: var(--color-attention);
+}
+
+.red {
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.red .dot {
+  background: var(--color-error);
+}
+
+/* PSX Heart Icon Variant */
+.withHeart {
+  padding-left: var(--space-2);
+}
+
+.heart {
+  flex-shrink: 0;
+  margin-right: calc(-1 * var(--space-1));
+}
+
+.sm.withHeart {
+  padding-left: var(--space-1);
+}
+
+.sm .heart {
+  margin-right: calc(-1 * var(--space-1));
+}

@@ -1,0 +1,125 @@
+.wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  background: var(--win98-form-bg);
+  background-image: var(--texture-card);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 600px;
+  font-family: var(--font-family);
+}
+
+/* Header styling */
+.table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table thead tr {
+  background: var(--color-primary);
+}
+
+.headerCell {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-on-primary);
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+/* Row number column */
+.rowNumber {
+  width: 50px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  background: var(--win98-form-bg);
+  border-right: 2px solid var(--win98-border-dark);
+  font-family: var(--font-family);
+}
+
+/* Data cells */
+.cell {
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 2px solid var(--win98-border-dark);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Alternating row colors */
+.evenRow {
+  background: var(--color-bg-primary);
+}
+
+.oddRow {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Hover state */
+.table tbody tr:hover {
+  background: var(--color-primary);
+}
+
+.table tbody tr:hover .cell {
+  color: var(--color-on-primary);
+}
+
+.table tbody tr:hover .rowNumber {
+  color: var(--color-on-primary);
+  background: var(--color-primary-dark);
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+}
+
+.loading svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui);
+}
+
+.empty svg {
+  opacity: 0.5;
+}

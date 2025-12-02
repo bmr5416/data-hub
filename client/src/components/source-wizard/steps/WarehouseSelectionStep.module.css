@@ -1,0 +1,211 @@
+.container {
+  padding: var(--space-4);
+}
+
+.header {
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  margin-bottom: var(--space-2);
+}
+
+.description {
+  font-family: var(--font-family);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border: 2px solid var(--color-error);
+  border-radius: 0;
+  margin-bottom: var(--space-4);
+  font-family: var(--font-family);
+}
+
+/* Option Cards */
+.optionCard {
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  border-radius: 0;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+  background: var(--color-bg-primary);
+  transition: background var(--transition-fast);
+}
+
+.optionCard:hover:not(.disabled) {
+  background: var(--color-bg-hover);
+}
+
+.optionCard:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.optionCard.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-bg);
+}
+
+.optionCard.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.optionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Custom Radio Button (Win98 style) */
+.radio {
+  width: 16px;
+  height: 16px;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  background: var(--win98-form-bg);
+  flex-shrink: 0;
+}
+
+.radioSelected {
+  background: var(--color-primary);
+  box-shadow: inset 0 0 0 3px var(--win98-form-bg), var(--win98-inset-shadow);
+}
+
+.optionTitle {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.disabledHint {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-left: var(--space-2);
+}
+
+.optionContent {
+  margin-top: var(--space-4);
+  padding-left: calc(16px + var(--space-3));
+}
+
+/* Form Elements */
+.formGroup {
+  margin-bottom: var(--space-4);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  border-radius: 0;
+  background: var(--win98-form-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFECD6' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-8);
+}
+
+.hint {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-4);
+}
+
+/* Warehouse Info Card */
+.warehouseInfo {
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  border-radius: 0;
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+  background: var(--color-bg-secondary);
+}
+
+.warehouseStats {
+  display: flex;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.warehouseStats span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Success State */
+.success {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 2px solid var(--color-success);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-weight: 600;
+}

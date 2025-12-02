@@ -1,0 +1,99 @@
+/* ErrorMessage - Win98 dungeon themed error display */
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--color-error);
+}
+
+/* Variants */
+.inline {
+  padding: var(--space-2);
+}
+
+.card {
+  padding: var(--space-4);
+  background: var(--color-error-bg);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--color-error) var(--color-error-dark)
+    var(--color-error-dark) var(--color-error);
+}
+
+.full {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8);
+  min-height: 200px;
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+}
+
+/* Icon */
+.iconWrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-error);
+}
+
+.full .iconWrapper {
+  width: 64px;
+  height: 64px;
+  background: var(--color-error-bg);
+  border: 2px solid var(--color-error);
+  margin-bottom: var(--space-4);
+}
+
+/* Content */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.full .content {
+  align-items: center;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-error);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.full .title {
+  font-size: var(--text-base);
+}
+
+.message {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.full .message {
+  max-width: 400px;
+}
+
+/* Retry button */
+.retryButton {
+  margin-top: var(--space-2);
+}
+
+.full .retryButton {
+  margin-top: var(--space-4);
+}

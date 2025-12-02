@@ -1,0 +1,241 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  margin: 0;
+}
+
+.description {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.emptyState {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.platformSelectors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  border-radius: 0;
+}
+
+.platformSelector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-button-bg);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  border-radius: 0;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.platformSelector:hover {
+  background: var(--color-button-hover);
+  border-color: var(--color-primary) var(--win98-border-dark) var(--win98-border-dark) var(--color-primary);
+}
+
+.platformSelector.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.platformSelector.complete {
+  border-color: var(--color-success);
+}
+
+.platformSelector:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.selectorName {
+  flex: 1;
+}
+
+.checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--color-success);
+  color: var(--color-white);
+  border-radius: 0;
+  font-size: var(--text-xs);
+}
+
+/* Mode Toggle - Recommended vs Custom */
+.modeToggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: var(--space-4);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  width: fit-content;
+}
+
+.modeButton {
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border-right: 2px solid var(--win98-border-dark);
+}
+
+.modeButton:last-child {
+  border-right: none;
+}
+
+.modeButton:hover:not(.modeActive) {
+  background: var(--color-bg-secondary);
+}
+
+.modeActive {
+  background: var(--color-primary);
+  color: var(--color-bg-primary);
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+/* Recommended Mode */
+.recommendedMode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.recommendedHint {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.recommendedPreview {
+  padding: var(--space-4);
+}
+
+.recommendedSection {
+  margin-bottom: var(--space-3);
+}
+
+.recommendedSection:last-child {
+  margin-bottom: 0;
+}
+
+.recommendedLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.recommendedFields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.fieldChip {
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--win98-border-dark);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  border-radius: 0;
+}
+
+.approveButton {
+  align-self: flex-start;
+}
+
+.approved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-success);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* Inherited Configuration Card */
+.inheritedCard {
+  padding: var(--space-4);
+  background: var(--color-warning-light);
+  border: 2px solid var(--color-warning);
+}
+
+.inheritedHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.inheritedTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-warning);
+  margin: 0;
+}
+
+.inheritedHint {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.recommendedPreviewInline {
+  background: var(--color-bg-primary);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.inheritedChip {
+  background: var(--color-warning-light);
+  border-color: var(--color-warning);
+}

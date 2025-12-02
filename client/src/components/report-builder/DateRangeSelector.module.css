@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Preset Select */
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.select {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Custom Date Range */
+.customRange {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.dateLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.dateInput {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.dateSeparator {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  padding-bottom: var(--space-2);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .customRange {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dateSeparator {
+    text-align: center;
+    padding: 0;
+  }
+}

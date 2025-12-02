@@ -1,0 +1,340 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-4);
+  font-size: 0.875rem;
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
+}
+
+.clientInfo h1 {
+  font-size: 1.75rem;
+}
+
+.clientMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.email {
+  color: var(--color-gray-600);
+}
+
+.industry {
+  background: var(--color-gray-100);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.platformDataLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  text-decoration: none;
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.platformDataLink:hover {
+  background: var(--color-success);
+  color: var(--color-on-primary);
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+.notesCard {
+  background: var(--color-gray-50);
+  margin-bottom: var(--space-6);
+}
+
+/* Tabs - raised like Win98 buttons */
+.tabs {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 2px solid var(--win98-border-dark);
+  margin-bottom: var(--space-6);
+}
+
+.tab {
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: -2px;
+  border-radius: 0;
+  transition: color var(--transition-base), border-color var(--transition-base);
+}
+
+.tab:hover {
+  background: var(--color-button-hover);
+  color: var(--color-primary);
+}
+
+.tab.active {
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+  background: var(--color-nav-active-bg);
+  color: var(--color-nav-active-text);
+  font-family: var(--font-display);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+.tabCount {
+  margin-left: var(--space-2);
+  background: var(--color-gray-100);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tab.active .tabCount {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* Section */
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.sectionHeader h2 {
+  font-size: 1.25rem;
+}
+
+/* Entity cards grid */
+.entityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4);
+}
+
+/* Entity card */
+.entityCard {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+}
+
+.entityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+}
+
+.entityName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.entityPlatform {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+}
+
+.platformBadge {
+  background: var(--color-gray-100);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+}
+
+.entityMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.entityDescription {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.entityActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--win98-border-dark);
+}
+
+/* Form modal */
+.formOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.formModal {
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--space-6);
+}
+
+.formModal h3 {
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  margin-bottom: var(--space-5);
+  font-size: 1.25rem;
+}
+
+.formField {
+  margin-bottom: var(--space-4);
+}
+
+.formField label {
+  display: block;
+  font-family: var(--font-ui);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+  width: 100%;
+  padding: var(--space-3);
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  background: var(--win98-form-bg);
+  border-radius: 0;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}
+
+.formField input:focus,
+.formField select:focus,
+.formField textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  border-top: 2px solid var(--win98-border-dark);
+  padding-top: var(--space-4);
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--color-gray-600);
+}
+
+.emptyHint {
+  font-size: 0.875rem;
+  margin-top: var(--space-2);
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: var(--space-10);
+  color: var(--color-gray-600);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+/* Wizard modal - larger size for multi-step wizard */
+.formModal:has([class*="container"]) {
+  max-width: 900px;
+  padding: var(--space-6);
+  background: var(--color-bg-secondary);
+  background-image: var(--texture-main);
+}

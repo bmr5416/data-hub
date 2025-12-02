@@ -1,0 +1,139 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Filter List */
+.filterList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Filter Row */
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+/* Field Select */
+.fieldSelect {
+  flex: 2;
+  padding: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  cursor: pointer;
+}
+
+.fieldSelect:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Operator Select */
+.operatorSelect {
+  flex: 1;
+  padding: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  cursor: pointer;
+}
+
+.operatorSelect:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Value Input */
+.valueInput {
+  flex: 2;
+  padding: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 2px solid;
+  border-radius: 0;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+}
+
+.valueInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.valueInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Remove Button */
+.removeBtn {
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  border: 2px dashed var(--win98-border-dark);
+  border-radius: 0;
+}
+
+/* Add Button */
+.addBtn {
+  align-self: flex-start;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .filterRow {
+    flex-wrap: wrap;
+  }
+
+  .fieldSelect {
+    flex: 1 0 100%;
+    order: 1;
+  }
+
+  .operatorSelect {
+    flex: 1;
+    order: 2;
+  }
+
+  .valueInput {
+    flex: 2;
+    order: 3;
+  }
+
+  .removeBtn {
+    order: 4;
+  }
+}

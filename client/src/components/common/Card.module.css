@@ -1,0 +1,71 @@
+.card {
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow), 4px 4px 0 rgba(0, 0, 0, 0.3);
+  width: 100%;
+  text-align: left;
+  color: var(--color-text-primary);
+}
+
+.interactive {
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast) var(--ease-out),
+              border-color var(--transition-fast) var(--ease-out);
+}
+
+.interactive:hover {
+  box-shadow: var(--win98-raised-shadow), 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border-color: var(--color-primary) var(--win98-border-dark) var(--win98-border-dark) var(--color-primary);
+}
+
+.interactive:active {
+  transform: translate(2px, 2px);
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow), 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition: none;
+  }
+  .interactive:active {
+    transform: none;
+  }
+}
+
+/* Padding variants */
+.sm {
+  padding: var(--space-3);
+}
+
+.md {
+  padding: var(--space-5);
+}
+
+.lg {
+  padding: var(--space-6);
+}
+
+.none {
+  padding: 0;
+}
+
+/* Card sections */
+.header {
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--win98-border-dark);
+  margin-bottom: var(--space-4);
+}
+
+.body {
+  /* Default styles */
+}
+
+.footer {
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--win98-border-dark);
+  margin-top: var(--space-4);
+}

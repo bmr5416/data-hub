@@ -1,0 +1,45 @@
+/* DuplicatePlatformModal - Content styles (Modal handled by base Modal component) */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.content {
+  padding: var(--space-5);
+}
+
+.message {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.subMessage {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: 2px solid var(--win98-border-dark);
+}

@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.track {
+  flex: 1;
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+  box-shadow: inset 1px 1px 0 var(--win98-border-darker);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 0;
+  transition: width var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}
+
+/* Sizes */
+.sm .track {
+  height: 4px;
+}
+
+.md .track {
+  height: 8px;
+}
+
+.lg .track {
+  height: 12px;
+}
+
+/* Colors */
+.primary {
+  background: var(--color-primary);
+}
+
+.success {
+  background: var(--color-success);
+}
+
+.warning {
+  background: var(--color-warning);
+}
+
+.error {
+  background: var(--color-error);
+}
+
+/* Label */
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-600);
+  min-width: 40px;
+  text-align: right;
+  font-family: var(--font-ui);
+}
+
+.sm .label {
+  font-size: 0.75rem;
+}

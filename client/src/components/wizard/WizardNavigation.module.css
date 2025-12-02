@@ -1,0 +1,14 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  border-top: 2px solid var(--win98-border-dark);
+  background-image: var(--texture-card);
+  margin-top: auto;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+}

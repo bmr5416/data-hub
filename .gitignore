@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+client/.env
+client/.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+playwright/.cache/
+
+# Cache
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
+
+# Local cache files
+.users_cache.json
+.channels_cache*.json
+.vercel
+
+# Development assets (raw source files, not for production)
+/dev-assets/
+
+# Development scripts documentation
+scripts/*.md
+
+# Demo video generation (development artifacts)
+client/public/assets/demo/segments/
+client/public/assets/demo/auth-state.json
+client/public/assets/demo/data-hub-demo.mp4
+client/public/assets/demo/data-hub-demo.webm
+client/public/assets/demo/demo-poster.jpg
+
+# Project documentation (internal tracking)
+PRODUCTION-READINESS-PLAN.md
+PRODUCT-PROGRESSION.md
+E2E-TESTING-TODO.md

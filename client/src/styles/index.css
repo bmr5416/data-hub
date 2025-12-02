@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Silkscreen&family=Pixelify+Sans:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* ===== TYPOGRAPHY ===== */
+  --font-family: "VT323", "Silkscreen", monospace;
+  --font-display: "Press Start 2P", monospace;
+  --font-ui: "Silkscreen", monospace;
+  --font-mono: 'SF Mono', 'Fira Code', Menlo, monospace;
+
+  /* Typography sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  /* ===== CORE PALETTE - Gold/XP Theme ===== */
+  --color-primary: #FFD700;
+  --color-primary-dark: #E5C100;
+  --color-primary-light: #FFAA5E;
+
+  /* Contrast-safe text colors for gold/orange backgrounds */
+  --color-on-primary: #1A1008;
+  --color-on-warning: #5C3D00;
+  --color-on-attention: #7A2E00;
+
+  /* ===== UI ELEMENT COLORS ===== */
+  --color-button-bg: #5A5A7C;
+  --color-button-text: #FFECD6;
+  --color-button-hover: #6A6A8C;
+  --color-nav-active-bg: #4A4A6C;
+  --color-nav-active-text: #FFD700;
+  --color-nav-active-border: #FFD700;
+
+  /* ===== GRAY SCALE - Dungeon Theme ===== */
+  --color-gray-50: #2D1B4E;
+  --color-gray-100: #3A3A5C;
+  --color-gray-200: #4A4A6C;
+  --color-gray-300: #5A5A7C;
+  --color-gray-400: #8D697A;
+  --color-gray-500: #A49488;
+  --color-gray-600: #C4B4A8;
+  --color-gray-700: #E8D4A8;
+  --color-gray-800: #F4E4C1;
+  --color-gray-900: #FFECD6;
+
+  /* ===== SEMANTIC COLORS ===== */
+  --color-success: #30A46C;
+  --color-success-light: rgba(48, 164, 108, 0.25);
+  --color-success-bg: rgba(48, 164, 108, 0.15);
+  --color-success-dark: #1B5E20;
+  --color-error: #E23D28;
+  --color-error-light: rgba(226, 61, 40, 0.25);
+  --color-error-bg: rgba(226, 61, 40, 0.15);
+  --color-error-dark: #C43420;
+  --color-warning: #FFAA5E;
+  --color-warning-light: rgba(255, 170, 94, 0.2);
+  --color-warning-text: rgb(153, 102, 0);
+  --color-warning-dark: #E65100;
+  --color-info: #00BBF9;
+  --color-info-light: rgba(0, 187, 249, 0.25);
+  --color-info-dark: #0277BD;
+  --color-attention: rgb(255, 152, 0);
+  --color-attention-light: rgba(255, 152, 0, 0.2);
+  --color-attention-text: rgb(230, 81, 0);
+
+  /* ===== COMPONENT COLORS ===== */
+  --color-bg-primary: #3A3A5C;
+  --color-bg-secondary: #2D1B4E;
+  --color-bg-tertiary: #4A4A6C;
+  --color-bg-hover: #4A4A6C;
+  --color-bg-code: #2D1B4E;
+  --color-primary-bg: rgba(255, 215, 0, 0.15);
+  --color-warning-bg: rgba(255, 170, 94, 0.15);
+  --color-border: #5A5A7C;
+  --color-text-primary: #FFECD6;
+  --color-text-secondary: #C4B4A8;
+  --color-text-muted: #B8A89C;
+  --color-text-disabled: #9A8A7E;
+  --color-text-placeholder: #8D697A;
+  --color-link: #00BBF9;
+
+  /* Additional colors */
+  --color-white: rgb(255, 255, 255);
+  --color-blue-400: rgb(59, 130, 246);
+  --color-green-400: rgb(34, 197, 94);
+  --color-red-400: rgb(248, 113, 113);
+
+  /* ===== WIN98 BORDER SYSTEM ===== */
+  --win98-bg: #3A3A5C;
+  --win98-border-light: #5A5A7C;
+  --win98-border-dark: #2D1B4E;
+  --win98-border-darker: #1A1A2E;
+  --win98-border-lighter: #4A4A6C;
+
+  /* Raised effect - for buttons, nav items, cards (default state) */
+  --win98-raised-border: var(--win98-border-light) var(--win98-border-dark) var(--win98-border-dark) var(--win98-border-light);
+  --win98-raised-shadow: inset 1px 1px 0 var(--win98-border-lighter), inset -1px -1px 0 var(--win98-border-darker);
+
+  /* Pressed effect - for active buttons, selected tabs, active nav */
+  --win98-pressed-border: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+  --win98-pressed-shadow: inset -1px -1px 0 var(--win98-border-lighter), inset 1px 1px 0 var(--win98-border-darker);
+
+  /* Inset effect - for form inputs, text areas, wells */
+  --win98-inset-border: var(--win98-border-dark) var(--win98-border-light) var(--win98-border-light) var(--win98-border-dark);
+  --win98-inset-shadow: inset 1px 1px 0 var(--win98-border-darker);
+
+  /* Form field colors */
+  --win98-form-bg: #3A3A5C;
+  --win98-form-bg-focus: #4A4A6C;
+
+  /* ===== TEXTURES ===== */
+  --texture-main:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(255, 236, 214, 0.02) 3px,
+      rgba(255, 236, 214, 0.02) 6px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(141, 105, 122, 0.03) 3px,
+      rgba(141, 105, 122, 0.03) 6px
+    ),
+    linear-gradient(
+      135deg,
+      rgba(45, 27, 78, 0.5) 0%,
+      transparent 50%,
+      rgba(90, 90, 124, 0.4) 100%
+    );
+  --texture-sidebar:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(141, 105, 122, 0.05) 2px,
+      rgba(141, 105, 122, 0.05) 4px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(58, 58, 92, 0.95) 0%,
+      rgba(45, 27, 78, 0.98) 100%
+    );
+  --texture-card:
+    linear-gradient(
+      135deg,
+      rgba(90, 90, 124, 0.3) 0%,
+      transparent 40%,
+      rgba(45, 27, 78, 0.2) 100%
+    );
+
+  /* ===== SPACING ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+  --space-10: 64px;
+
+  /* ===== PIXEL-PERFECT SIZING ===== */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-full: 9999px;
+
+  /* ===== PIXEL SHADOWS ===== */
+  --shadow-sm: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 4px 4px 0 rgba(0, 0, 0, 0.4);
+  --shadow-lg: 6px 6px 0 rgba(0, 0, 0, 0.5);
+
+  /* ===== LAYOUT ===== */
+  --sidebar-width: 260px;
+  --header-height: 60px;
+
+  /* ===== INSTANT TRANSITIONS (Retro Feel) ===== */
+  --transition-fast: 0ms;
+  --transition-base: 0ms;
+  --transition-content: 100ms;
+  --transition-slow: 0ms;
+  --transition-emphasis: 0ms;
+  --transition-loading: 8s;
+
+  /* Animation easing */
+  --ease-out: cubic-bezier(0.0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ===== MODAL SYSTEM ===== */
+  --modal-z-index: 100;
+  --modal-overlay-bg: rgba(0, 0, 0, 0.6);
+  --modal-animation-in: 200ms;
+  --modal-animation-out: 150ms;
+  --modal-max-height: 90vh;
+
+  /* Modal Size Variants */
+  --modal-size-xs: 320px;
+  --modal-size-sm: 400px;
+  --modal-size-md: 500px;
+  --modal-size-lg: 700px;
+  --modal-size-xl: 900px;
+  --modal-size-2xl: 1100px;
+  --modal-size-full: 1400px;
+
+  /* ===== AUDIO SYSTEM ===== */
+  /* Volume levels (0-1 scale) */
+  --audio-volume-muted: 0;
+  --audio-volume-low: 0.15;
+  --audio-volume-medium-low: 0.3;
+  --audio-volume-medium: 0.5;
+  --audio-volume-medium-high: 0.6;
+  --audio-volume-high: 0.7;
+  --audio-volume-max: 1.0;
+
+  /* Category default volumes */
+  --audio-level-ui: var(--audio-volume-medium-low);
+  --audio-level-modal: var(--audio-volume-medium);
+  --audio-level-feedback: var(--audio-volume-medium);
+  --audio-level-wizard: var(--audio-volume-medium);
+  --audio-level-notification: var(--audio-volume-high);
+  --audio-level-imp: var(--audio-volume-medium);
+
+  /* Timing */
+  --audio-fade-duration: 150ms;
+  --audio-debounce-ui: 50ms;
+  --audio-debounce-feedback: 200ms;
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== BASE ELEMENT STYLES ===== */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-primary);
+  background-color: var(--color-gray-50);
+  background-image: var(--texture-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== HEADINGS ===== */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1rem;
+}
+
+h3 {
+  font-size: 0.875rem;
+}
+
+h4 {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ===== LINKS ===== */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+}
+
+/* ===== BUTTONS ===== */
+button {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* ===== FORM INPUTS ===== */
+input, textarea, select {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  background: var(--win98-form-bg);
+  color: var(--color-text-primary);
+}
+
+input:not([type="checkbox"]):not([type="radio"])::placeholder,
+textarea::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  background: var(--win98-form-bg-focus);
+  border-color: var(--color-primary) var(--win98-border-light) var(--win98-border-light) var(--color-primary);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  background: var(--win98-form-bg);
+  accent-color: var(--color-primary);
+}
+
+/* ===== UTILITY CLASSES ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

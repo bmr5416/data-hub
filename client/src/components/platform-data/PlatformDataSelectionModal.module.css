@@ -1,0 +1,214 @@
+/* PlatformDataSelectionModal - Content styles (Modal handled by base Modal component) */
+
+.header {
+  position: relative;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-bg-primary);
+  border-bottom: 2px solid var(--win98-border-dark);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  color: var(--color-text-primary);
+  background: var(--color-button-bg);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+  cursor: pointer;
+  padding: 2px var(--space-1);
+  border-radius: 0;
+  font-family: var(--font-family);
+  font-size: var(--text-xs);
+  transition: all var(--transition-base);
+}
+
+.closeButton:hover {
+  background: var(--color-bg-secondary);
+}
+
+.closeButton:active {
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+  background-image: var(--texture-card);
+}
+
+.optionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.optionCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) !important;
+  border-radius: 0 !important;
+  border: 2px solid !important;
+  border-color: var(--win98-raised-border) !important;
+  box-shadow: var(--win98-raised-shadow);
+  transition: all var(--transition-fast);
+}
+
+.optionCard:hover {
+  border-color: var(--color-primary) var(--win98-border-dark) var(--win98-border-dark) var(--color-primary) !important;
+}
+
+.optionCard.selected {
+  border-color: var(--win98-pressed-border) !important;
+  box-shadow: var(--win98-pressed-shadow);
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.blendedOption {
+  border-style: dashed;
+}
+
+.blendedOption.selected {
+  border-style: solid;
+}
+
+.optionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-bg-primary);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-inset-border);
+  box-shadow: var(--win98-inset-shadow);
+  color: var(--color-primary);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.optionIconSelected {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+.optionInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.optionName {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.optionMeta {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.checkIcon {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.coinIcon {
+  flex-shrink: 0;
+  margin-right: var(--space-2);
+}
+
+/* Loading and Empty States */
+.loadingState,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  font-family: var(--font-family);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.loadingState svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.emptyState svg {
+  opacity: 0.5;
+}
+
+.emptyState p {
+  font-size: var(--text-sm);
+  margin: 0;
+  max-width: 280px;
+}
+
+/* Error State */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  font-family: var(--font-family);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.errorMessage {
+  color: var(--color-error);
+  font-size: var(--text-sm);
+  max-width: 280px;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-bg-primary);
+  background-image: var(--texture-card);
+  border-top: 2px solid var(--win98-border-dark);
+}

@@ -1,0 +1,125 @@
+/* AudioToggle - Win98-styled audio mute/unmute button */
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  border-radius: 0;
+  box-shadow: var(--win98-raised-shadow);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color var(--transition-fast) var(--ease-out);
+}
+
+.toggle:hover {
+  background: var(--color-bg-hover);
+}
+
+.toggle:active {
+  border-color: var(--win98-pressed-border);
+  box-shadow: var(--win98-pressed-shadow);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Enabled state - gold accent */
+.enabled {
+  color: var(--color-primary);
+}
+
+.enabled .speakerIcon {
+  color: var(--color-primary);
+}
+
+/* Disabled/muted state - muted colors */
+.disabled {
+  color: var(--color-text-muted);
+}
+
+.disabled .speakerIcon {
+  color: var(--color-text-muted);
+}
+
+/* Icon wrapper */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+/* Speaker icon */
+.speakerIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Label */
+.label {
+  display: block;
+}
+
+/* Size variants */
+.sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.625rem;
+}
+
+.sm .iconWrapper {
+  width: 12px;
+  height: 12px;
+}
+
+.sm .speakerIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.md {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.75rem;
+}
+
+/* Sound wave animations - subtle pulse when sound is on */
+@keyframes wavePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.enabled .wave1,
+.enabled .wave2 {
+  animation: wavePulse 1.5s ease-in-out infinite;
+}
+
+.enabled .wave2 {
+  animation-delay: 0.2s;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .toggle {
+    transition: none;
+  }
+
+  .enabled .wave1,
+  .enabled .wave2 {
+    animation: none;
+  }
+}

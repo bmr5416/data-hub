@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+}
+
+/* Compact mode for embedded usage */
+.compact {
+  /* Reduce outer spacing when embedded */
+}
+
+.compactWizard {
+  /* Override wizard styles for compact mode */
+}
+
+/* In compact mode, the wizard header is hidden via props (title=null) */
+/* Progress bar and navigation remain visible */
+
+.compact .compactWizard {
+  /* Remove any extra margins in compact mode */
+  margin: 0;
+}

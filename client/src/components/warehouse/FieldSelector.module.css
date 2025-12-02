@@ -1,0 +1,223 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--win98-border-dark);
+  background-image: var(--texture-card);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+.loading,
+.error {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+@media (max-width: 768px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  background-image: var(--texture-card);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+}
+
+.columnHeader h4 {
+  flex: 1;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.count {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-info-light);
+  border: 2px solid var(--color-primary);
+  border-radius: 0;
+}
+
+.fieldList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.categoryCard {
+  overflow: hidden;
+  border-radius: 0;
+  /* Visual containment for collapsed categories - Win98 raised style */
+  background: var(--color-bg-secondary);
+  border: 2px solid;
+  border-color: var(--win98-raised-border);
+  box-shadow: var(--win98-raised-shadow);
+}
+
+.categoryToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-align: left;
+  transition: none;
+}
+
+.categoryToggle:hover {
+  background: var(--color-bg-secondary);
+}
+
+.categoryToggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.categoryName {
+  flex: 1;
+}
+
+.categoryBadge {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--win98-border-dark);
+  border-radius: 0;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  /* Inset style for expanded content - creates depth hierarchy */
+  background: var(--color-bg-primary);
+  border-top: 2px solid var(--win98-border-dark);
+}
+
+.field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: 0;
+  cursor: pointer;
+  transition: none;
+}
+
+.field:hover {
+  background: var(--color-bg-secondary);
+}
+
+.field.selected {
+  background: var(--color-info-light);
+  border: 2px solid var(--color-primary);
+}
+
+.checkbox {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.fieldInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.fieldName {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.platformName {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* Unavailable field - not in current data source */
+.field.unavailable {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.field.unavailable .fieldName {
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.field.unavailable .checkbox {
+  cursor: not-allowed;
+}
+
+/* Recommended field - from Step 2 selections */
+.field.recommended {
+  background: var(--color-primary-light);
+  border-left: 2px solid var(--color-primary);
+}
