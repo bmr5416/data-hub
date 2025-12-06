@@ -1,98 +1,135 @@
-# Supabase Migration Notes
+# Supabase Architecture Notes
 
-## Status: In Progress
+## Status: Complete
 
-The Data Hub is migrating from Google Sheets to Supabase (PostgreSQL) as the primary database backend.
+Data Hub uses Supabase (PostgreSQL) as the primary database backend with a repository pattern for all data access.
 
-## Completed
+## Architecture
 
-- [x] Created `supabaseClient.js` - Supabase client singleton
-- [x] Created `supabase.js` - Full CRUD service layer (replaces `sheets.js`)
-- [x] Created SQL migration schema (`server/supabase/migrations/001_initial_schema.sql`)
-- [x] Updated all main route files to import from `supabase.js`
-- [x] Updated `.env.example` with Supabase credentials
+```
+Routes → Repositories → Supabase Client → PostgreSQL
+         ↑
+Services ─┘
+```
 
-## Remaining Work: Full Google Sheets Removal
+### Components
 
-The following files still contain Google Sheets integration that needs to be removed or refactored:
+| Layer | Location | Purpose |
+|-------|----------|---------|
+| Routes | `server/routes/*.js` | HTTP handlers, validation |
+| Services | `server/services/*.js` | Business logic, orchestration |
+| Repositories | `server/services/repositories/*.js` | Data access, field mapping |
+| Base | `server/services/base/BaseRepository.js` | CRUD operations |
+| Client | `server/services/supabaseClient.js` | Supabase connection singleton |
 
-### Services to Remove/Refactor
+## Repository Pattern
 
-1. **`server/services/sheets.js`**
-   - Status: No longer imported by routes, but file still exists
-   - Action: Delete file after confirming all functionality migrated
+All database access goes through repositories that extend `BaseRepository`:
 
-2. **`server/services/clientWorkbookService.js`**
-   - Status: Uses Google Sheets API to create client data workbooks
-   - Action: Either remove workbook feature entirely OR migrate to Supabase-based solution
-   - Note: This service creates actual Google Sheets for users to paste data into
+```javascript
+import { clientRepository } from '../services/repositories/index.js';
 
-3. **`server/services/warehouseService.js`** (if exists)
-   - Status: May have Google Sheets dependencies
-   - Action: Review and update to use Supabase
+// Standard operations
+const client = await clientRepository.findById(id);
+const clients = await clientRepository.findAll({ filters: { status: 'active' } });
+const created = await clientRepository.create({ name, status });
+const updated = await clientRepository.update(id, { status: 'inactive' });
+await clientRepository.delete(id);
+```
 
-### Routes to Review
+### Field Mapping
 
-1. **`server/routes/workbooks.js`**
-   - Uses `clientWorkbookService` which depends on Google Sheets
-   - Decision needed: Remove workbook feature or find alternative
+Repositories handle snake_case (DB) ↔ camelCase (JS) conversion:
 
-### Frontend Components to Update
+```javascript
+// mapRow: DB → JS
+{ client_id, created_at } → { clientId, createdAt }
 
-1. **`client/src/components/source-wizard/`**
-   - The Source Wizard creates Google Sheets workbooks for data upload
-   - Options:
-     - A) Remove the wizard entirely
-     - B) Replace with direct file upload to Supabase
-     - C) Use Supabase Storage for file uploads
+// toDbRow: JS → DB
+{ clientId, createdAt } → { client_id, created_at }
+```
 
-2. **`client/src/pages/ClientDetail.jsx`**
-   - May have workbook-related UI that needs updating
+## Available Repositories
 
-### Data Files to Clean Up
-
-1. **`server/data/platformMappings.js`** - Review if still needed
-2. **`server/data/platforms.js`** - Review if still needed
+| Repository | Table | Purpose |
+|------------|-------|---------|
+| ClientRepository | clients | Client records |
+| SourceRepository | data_sources | Platform connections |
+| WarehouseRepository | data_warehouses | Data warehouses |
+| UploadRepository | platform_uploads | Upload tracking |
+| PlatformDataRepository | platform_data | Raw uploaded data |
+| BlendedDataRepository | blended_data | Harmonized data |
+| ReportRepository | reports | Report definitions |
+| ReportAlertRepository | report_alerts | Report alerts |
+| ReportDeliveryHistoryRepository | report_delivery_history | Delivery logs |
+| KpiRepository | kpis | KPI definitions |
+| KpiAlertRepository | kpi_alerts | KPI alerts + history |
+| EtlRepository | etl_processes | ETL pipelines |
+| LineageRepository | data_lineage | Data lineage |
+| NoteRepository | notes | Documentation |
+| SmtpConfigRepository | smtp_config | Email settings |
+| ScheduledJobRepository | scheduled_jobs | Cron jobs |
+| UserProfileRepository | user_profiles | User metadata |
+| UserClientAssignmentRepository | user_client_assignments | Access control |
 
 ## Environment Variables
 
-### Required (Supabase)
 ```bash
+# Supabase (Required)
 SUPABASE_URL=https://[project-ref].supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
+SUPABASE_JWT_SECRET=super-secret-jwt-token
+
+# Client-side
+VITE_SUPABASE_URL=https://[project-ref].supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...
 ```
 
-### Deprecated (Google Sheets) - To Be Removed
+## Local Development
+
 ```bash
-# These can be removed once migration is complete
-GOOGLE_SERVICE_ACCOUNT_EMAIL=...
-GOOGLE_PRIVATE_KEY=...
-GOOGLE_SHEET_ID=...
+# Start Supabase
+supabase start
+
+# Get credentials
+supabase status
+
+# Apply migrations
+supabase db reset
+
+# Stop
+supabase stop
 ```
 
-## Decision Points
+## Migration History
 
-### Source Wizard / Data Workbook Feature
+### Phase 1: Google Sheets → Supabase (Completed)
+- Migrated from Google Sheets API to Supabase PostgreSQL
+- Created initial schema migrations
+- Removed all Google dependencies
 
-The current implementation creates Google Sheets workbooks where users paste exported platform data. Options for the future:
+### Phase 2: Service Consolidation (Completed)
+- Created `supabaseService.js` as unified data layer
+- Updated all routes to use service layer
+- Standardized error handling
 
-1. **Remove feature** - Simplest, removes Google dependency entirely
-2. **File upload** - Users upload CSV/Excel files directly, stored in Supabase Storage
-3. **Direct API integration** - Connect to platforms via API (more complex)
+### Phase 3: Repository Pattern (Completed - Dec 2025)
+- Introduced BaseRepository with standard CRUD
+- Created 18+ domain-specific repositories
+- Migrated all routes from `supabaseService` to repositories
+- Migrated all services (scheduler, alerts, workbook) to repositories
+- Created middleware barrel export (`server/middleware/index.js`)
+- Deprecated `supabaseService.js` facade
 
-### Recommendation
+## Files Deprecated (Safe to Remove)
 
-For MVP: Remove the Source Wizard workbook feature to eliminate all Google dependencies. The core Data Hub functionality (clients, sources, ETL, KPIs, reports, lineage) works fully with Supabase.
+The following files are no longer used:
+- `server/services/sheets.js` - Original Google Sheets integration
+- `server/services/supabaseService.js` - Legacy facade (replaced by repositories)
 
-## Migration Checklist
+## Documentation
 
-- [ ] Set up Supabase project
-- [ ] Run migration SQL in Supabase SQL Editor
-- [ ] Add Supabase credentials to `.env`
-- [ ] Test all API endpoints
-- [ ] Remove `sheets.js` service file
-- [ ] Remove or refactor `clientWorkbookService.js`
-- [ ] Update/remove Source Wizard components
-- [ ] Remove Google Sheets dependencies from `package.json`
-- [ ] Update CLAUDE.md documentation
-- [ ] Remove deprecated env vars from `.env.example`
+- **Skill Reference**: `.claude/skills/supabase-patterns/SKILL.md`
+- **Service Patterns**: `.claude/skills/supabase-patterns/SERVICES.md`
+- **CLI Reference**: `.claude/skills/supabase-patterns/CLI.md`
+- **RLS Policies**: `.claude/skills/supabase-patterns/RLS.md`
