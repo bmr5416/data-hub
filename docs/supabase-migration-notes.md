@@ -96,20 +96,37 @@ VITE_SUPABASE_ANON_KEY=eyJ...
 
 ### JWT Verification
 
-The auth middleware (`server/middleware/auth.js`) auto-detects the JWT signing algorithm:
+The auth middleware (`server/middleware/auth.js`) dynamically detects the signing algorithm:
 
-| Token Algorithm | Verification Method | When Used |
-|-----------------|---------------------|-----------|
-| HS256 | Symmetric key (`SUPABASE_JWT_SECRET`) | Supabase CLI & Cloud (default) |
-| ES256 | Asymmetric via JWKS endpoint | Supabase Cloud (if configured) |
+```
+JWT Token Arrives
+      ↓
+Parse Header (`alg` field)
+      ↓
+┌─────────┴─────────┐
+HS256             ES256
+↓                 ↓
+Use JWT_SECRET    Fetch JWKS
+(symmetric)       (asymmetric)
+```
 
-The middleware parses the JWT header to detect the algorithm and routes to the appropriate verifier.
+| Token Algorithm | Verification Method | Env Var Required |
+|-----------------|---------------------|------------------|
+| HS256 | Symmetric key verification | `SUPABASE_JWT_SECRET` |
+| ES256 | Asymmetric via JWKS endpoint | None (uses public keys) |
+
+**Key behavior:** The middleware reads the `alg` field from the JWT header and routes to the appropriate verifier. Both Supabase CLI (local) and Cloud can issue either algorithm—the system adapts automatically. Supabase Cloud issues HS256 tokens by default.
 
 ### Startup Validation
 
 The server validates auth configuration before accepting requests (`validateAuthConfig()`):
-- **Production**: Verifies JWKS endpoint is reachable (warning if unavailable, lazy retry on first request)
-- **Local**: Verifies `SUPABASE_JWT_SECRET` exists (fatal if missing)
+
+| Environment | Validation | On Failure |
+|-------------|------------|------------|
+| Production | Attempts to reach JWKS endpoint | Warning logged, startup continues, retry on first auth request |
+| Local | Checks `SUPABASE_JWT_SECRET` exists | Fatal error, server exits |
+
+**Note:** If JWKS remains unavailable in production, authentication requests will fail at runtime.
 
 ```javascript
 // server/index.js - called during startServer()

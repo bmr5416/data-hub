@@ -96,13 +96,15 @@ If Vercel auto-detects the wrong framework:
 
 ### Required for Production
 
-| Variable | Purpose | Source |
-|----------|---------|--------|
-| `SUPABASE_URL` | Database API URL | Supabase Dashboard → Settings → API |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-side admin access | Supabase Dashboard → Settings → API |
-| `SUPABASE_JWT_SECRET` | JWT signature verification | Supabase Dashboard → Settings → API |
-| `VITE_SUPABASE_URL` | Client-side API URL | Same as SUPABASE_URL |
-| `VITE_SUPABASE_ANON_KEY` | Client-side anon key | Supabase Dashboard → Settings → API |
+| Variable | Purpose | Required | Source |
+|----------|---------|----------|--------|
+| `SUPABASE_URL` | Database API URL | Always | Dashboard → Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-side admin access | Always | Dashboard → Settings → API |
+| `SUPABASE_JWT_SECRET` | JWT signature verification (HS256) | If tokens use HS256* | Dashboard → Settings → API → JWT Secret |
+| `VITE_SUPABASE_URL` | Client-side API URL | Always | Same as SUPABASE_URL |
+| `VITE_SUPABASE_ANON_KEY` | Client-side anon key | Always | Dashboard → Settings → API |
+
+*Supabase Cloud issues HS256-signed tokens by default. The auth middleware auto-detects the algorithm from the JWT header. If your project uses ES256, the JWKS endpoint is used instead (no secret needed).
 
 ### Adding via CLI
 
@@ -126,3 +128,13 @@ npx vercel env ls production
 # Pull to local .env for testing
 npx vercel env pull .env.local
 ```
+
+### Troubleshooting
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "Invalid token" / "invalid signature" | JWT secret mismatch or encoding issue | Re-add secret using `printf '%s' 'SECRET' \| npx vercel env add ...` |
+| "Server authentication not configured" | Missing `SUPABASE_JWT_SECRET` (local) | Copy JWT Secret from `supabase status` to `.env` |
+| "Token verification failed" | JWKS endpoint unreachable (production) | Check `SUPABASE_URL` is correct, verify network access |
+| "No authorization token provided" | Client not sending Bearer token | Check frontend auth context and API interceptors |
+| 401 errors after deploy | Old serverless function cache | Force redeploy: `npx vercel --prod --force` |
