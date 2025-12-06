@@ -1,0 +1,19 @@
+# Demo video files (large, not needed in prod)
+client/public/assets/demo/*.mp4
+client/public/assets/demo/*.webm
+client/public/assets/demo/segments/
+
+# Development files
+*.md
+!README.md
+.claude/
+docs/
+tests/
+scripts/
+*.test.js
+*.spec.js
+
+# Local environment
+.env.local
+.env.development
+supabase/.temp/

@@ -74,16 +74,31 @@ Repositories handle snake_case (DB) ↔ camelCase (JS) conversion:
 
 ## Environment Variables
 
+### Local Development (Supabase CLI)
 ```bash
-# Supabase (Required)
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+SUPABASE_JWT_SECRET=super-secret-jwt-token   # Required - CLI uses HS256
+```
+
+### Production (Supabase Cloud)
+```bash
 SUPABASE_URL=https://[project-ref].supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
-SUPABASE_JWT_SECRET=super-secret-jwt-token
+# SUPABASE_JWT_SECRET not needed - Cloud uses ES256 via JWKS endpoint
+```
 
-# Client-side
+### Client-side
+```bash
 VITE_SUPABASE_URL=https://[project-ref].supabase.co
 VITE_SUPABASE_ANON_KEY=eyJ...
 ```
+
+### JWT Verification
+
+The auth middleware automatically detects the environment:
+- **Local** (`127.0.0.1`): Uses HS256 symmetric verification with `SUPABASE_JWT_SECRET`
+- **Production** (`*.supabase.co`): Uses ES256 asymmetric verification via JWKS endpoint
 
 ## Local Development
 

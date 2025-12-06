@@ -2,12 +2,52 @@
  * JWT Authentication Middleware
  *
  * Verifies Supabase JWTs and attaches user info to req.user.
- * Uses the SUPABASE_JWT_SECRET for HS256 verification.
+ *
+ * Supports two verification modes:
+ * - Production (ES256): Uses JWKS endpoint for asymmetric key verification
+ * - Local Development (HS256): Uses SUPABASE_JWT_SECRET for symmetric verification
  */
 
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import jwt from 'jsonwebtoken';
 import { AppError } from './errorHandler.js';
 import logger from '../utils/logger.js';
+
+/**
+ * Detect if we're using production Supabase (cloud) or local development
+ * Production uses ES256 asymmetric keys via JWKS
+ * Local uses HS256 with JWT secret
+ */
+function isProductionSupabase() {
+  const url = process.env.SUPABASE_URL || '';
+  return url.includes('.supabase.co');
+}
+
+/**
+ * Cache for the JWKS (JSON Web Key Set) from Supabase
+ * This avoids fetching the keys on every request
+ */
+let jwksCache = null;
+
+/**
+ * Get or create the JWKS remote key set for production verification
+ * @returns {ReturnType<typeof createRemoteJWKSet>}
+ */
+function getJWKS() {
+  if (!jwksCache) {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    if (!supabaseUrl) {
+      throw new AppError('SUPABASE_URL not configured', 500);
+    }
+    const jwksUrl = new URL('/auth/v1/.well-known/jwks.json', supabaseUrl);
+    jwksCache = createRemoteJWKSet(jwksUrl);
+    logger.info('JWKS endpoint configured', {
+      url: jwksUrl.toString(),
+      component: 'Auth'
+    });
+  }
+  return jwksCache;
+}
 
 /**
  * Extract JWT token from Authorization header
@@ -23,15 +63,51 @@ function extractToken(req) {
 }
 
 /**
- * Verify Supabase JWT using the JWT secret
+ * Verify JWT using ES256 (asymmetric) via JWKS endpoint
+ * Used for production Supabase (cloud)
+ * @param {string} token - JWT token
+ * @returns {Promise<object>} Decoded token payload
+ */
+async function verifyJwtES256(token) {
+  try {
+    const jwks = getJWKS();
+    const { payload } = await jwtVerify(token, jwks, {
+      // Supabase Auth issues tokens with these issuers
+      issuer: (iss) => iss?.includes('/auth/v1') ?? false,
+    });
+    return payload;
+  } catch (error) {
+    logger.debug('ES256 JWT verification failed', {
+      error: error.message,
+      code: error.code,
+      component: 'Auth'
+    });
+
+    if (error.code === 'ERR_JWT_EXPIRED') {
+      throw new AppError('Token expired', 401);
+    }
+    if (error.code === 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED') {
+      throw new AppError('Invalid token signature', 401);
+    }
+    if (error.code === 'ERR_JWKS_NO_MATCHING_KEY') {
+      throw new AppError('Token signed with unknown key', 401);
+    }
+    throw new AppError('Token verification failed', 401);
+  }
+}
+
+/**
+ * Verify JWT using HS256 (symmetric) with JWT secret
+ * Used for local development with Supabase CLI
  * @param {string} token - JWT token
  * @returns {object} Decoded token payload
- * @throws {AppError} If verification fails
  */
-function verifyJwt(token) {
+function verifyJwtHS256(token) {
   const secret = process.env.SUPABASE_JWT_SECRET;
   if (!secret) {
-    logger.error('SUPABASE_JWT_SECRET not configured', { component: 'Auth' });
+    logger.error('SUPABASE_JWT_SECRET not configured for local development', {
+      component: 'Auth'
+    });
     throw new AppError('Server authentication not configured', 500);
   }
 
@@ -52,6 +128,36 @@ function verifyJwt(token) {
 }
 
 /**
+ * Verify Supabase JWT - automatically selects verification method
+ * @param {string} token - JWT token
+ * @returns {Promise<object>} Decoded token payload
+ */
+async function verifyJwt(token) {
+  if (isProductionSupabase()) {
+    return verifyJwtES256(token);
+  }
+  return verifyJwtHS256(token);
+}
+
+/**
+ * Extract user info from decoded JWT payload
+ * @param {object} decoded - Decoded JWT payload
+ * @returns {object} User info object
+ */
+function extractUserFromPayload(decoded) {
+  return {
+    id: decoded.sub, // Supabase user UUID
+    email: decoded.email,
+    role: decoded.role || 'authenticated',
+    isAdmin: decoded.user_metadata?.is_admin || false,
+    metadata: decoded.user_metadata || {},
+    appMetadata: decoded.app_metadata || {},
+    aud: decoded.aud,
+    exp: decoded.exp,
+  };
+}
+
+/**
  * JWT authentication middleware
  * Verifies Supabase JWT and attaches user info to req.user
  *
@@ -59,7 +165,7 @@ function verifyJwt(token) {
  * @param {import('express').Response} res - Express response
  * @param {import('express').NextFunction} next - Express next function
  */
-export function requireAuth(req, res, next) {
+export async function requireAuth(req, res, next) {
   try {
     const token = extractToken(req);
 
@@ -67,23 +173,13 @@ export function requireAuth(req, res, next) {
       throw new AppError('No authorization token provided', 401);
     }
 
-    const decoded = verifyJwt(token);
+    const decoded = await verifyJwt(token);
 
     // Store raw token for user-context Supabase queries
     req.token = token;
 
     // Attach user info to request
-    // Supabase JWT claims: sub (user id), email, role, user_metadata, app_metadata
-    req.user = {
-      id: decoded.sub, // Supabase user UUID
-      email: decoded.email,
-      role: decoded.role || 'authenticated',
-      isAdmin: decoded.user_metadata?.is_admin || false,
-      metadata: decoded.user_metadata || {},
-      appMetadata: decoded.app_metadata || {},
-      aud: decoded.aud,
-      exp: decoded.exp,
-    };
+    req.user = extractUserFromPayload(decoded);
 
     // Debug log successful auth
     logger.debug('User authenticated', {
@@ -143,21 +239,14 @@ export function requireAdmin(req, res, next) {
  * @param {import('express').Response} res - Express response
  * @param {import('express').NextFunction} next - Express next function
  */
-export function optionalAuth(req, res, next) {
+export async function optionalAuth(req, res, next) {
   try {
     const token = extractToken(req);
 
     if (token) {
-      const decoded = verifyJwt(token);
+      const decoded = await verifyJwt(token);
       req.token = token; // Store for user-context queries
-      req.user = {
-        id: decoded.sub,
-        email: decoded.email,
-        role: decoded.role || 'authenticated',
-        isAdmin: decoded.user_metadata?.is_admin || false,
-        metadata: decoded.user_metadata || {},
-        appMetadata: decoded.app_metadata || {},
-      };
+      req.user = extractUserFromPayload(decoded);
     }
 
     next();

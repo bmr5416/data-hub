@@ -29,7 +29,13 @@ import logger from './utils/logger.js';
 dotenv.config({ path: '../.env' });
 
 // Validate required environment variables at startup
-const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_JWT_SECRET'];
+// Note: SUPABASE_JWT_SECRET is only required for local development (HS256)
+// Production Supabase Cloud uses ES256 asymmetric keys via JWKS endpoint
+const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'];
+const isLocalDev = !process.env.SUPABASE_URL?.includes('.supabase.co');
+if (isLocalDev) {
+  requiredEnvVars.push('SUPABASE_JWT_SECRET');
+}
 const missingEnvVars = requiredEnvVars.filter((v) => !process.env[v]);
 if (missingEnvVars.length > 0) {
   logger.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
