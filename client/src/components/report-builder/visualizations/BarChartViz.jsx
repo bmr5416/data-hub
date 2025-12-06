@@ -109,7 +109,9 @@ BarChartViz.propTypes = {
   /** Optional subtitle */
   subtitle: PropTypes.string,
   /** Chart data array */
-  data: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.arrayOf(
+    PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
+  ),
   /** Key for X axis values */
   xAxisKey: PropTypes.string,
   /** Keys for Y axis values (one per bar series) */

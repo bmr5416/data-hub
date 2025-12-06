@@ -4,7 +4,7 @@ import Papa from 'papaparse';
 import clientDataService from '../services/clientDataService.js';
 import blendingService from '../services/blendingService.js';
 import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { AppError } from '../errors/AppError.js';
 import { getPlatformById } from '../data/platforms.js';
 import { getRequestLogger } from '../middleware/requestId.js';
 import { validateUUID, validateEntityId } from '../services/validators.js';
@@ -520,8 +520,11 @@ router.get('/clients/:clientId/data/data/:platformId/preview', requireClientAcce
   try {
     const clientId = validateEntityId(req.params.clientId, 'clientId');
     const { platformId } = req.params;
-    const limit = req.query.limit === 'all' ? null : parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
+    // Validate pagination with bounds checking
+    const MAX_LIMIT = 1000;
+    const MAX_OFFSET = 100000;
+    const limit = req.query.limit === 'all' ? null : Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), MAX_LIMIT);
+    const offset = Math.min(Math.max(parseInt(req.query.offset, 10) || 0, 0), MAX_OFFSET);
 
     // Validate platform exists
     const platform = getPlatformById(platformId);
@@ -544,8 +547,11 @@ router.get('/clients/:clientId/data/data/:platformId/preview', requireClientAcce
 router.get('/clients/:clientId/data/blended/preview', requireClientAccess, async (req, res, next) => {
   try {
     const clientId = validateEntityId(req.params.clientId, 'clientId');
-    const limit = req.query.limit === 'all' ? null : parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
+    // Validate pagination with bounds checking
+    const MAX_LIMIT = 1000;
+    const MAX_OFFSET = 100000;
+    const limit = req.query.limit === 'all' ? null : Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), MAX_LIMIT);
+    const offset = Math.min(Math.max(parseInt(req.query.offset, 10) || 0, 0), MAX_OFFSET);
 
     const result = await clientDataService.getBlendedDataPreview(clientId, limit, offset);
 

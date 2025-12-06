@@ -115,6 +115,35 @@ class KpiAlertRepository extends BaseRepository {
   async setActive(alertId, active) {
     return this.update(alertId, { active });
   }
+
+  /**
+   * Get trigger history for an alert
+   * @param {string} alertId - Alert ID
+   * @param {number} limit - Maximum number of records to return
+   * @returns {Promise<Array>} Array of history entries
+   */
+  async findHistory(alertId, limit = 100) {
+    await this.init();
+
+    const { data, error } = await supabase
+      .from('alert_history')
+      .select('*')
+      .eq('alert_id', alertId)
+      .order('triggered_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+
+    return data.map((row) => ({
+      id: row.id,
+      alertId: row.alert_id,
+      kpiId: row.kpi_id,
+      actualValue: parseFloat(row.actual_value),
+      threshold: parseFloat(row.threshold),
+      message: row.message,
+      triggeredAt: row.triggered_at,
+    }));
+  }
 }
 
 export const kpiAlertRepository = new KpiAlertRepository();

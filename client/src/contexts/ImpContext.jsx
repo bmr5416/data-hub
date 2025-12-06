@@ -100,8 +100,8 @@ export function ImpProvider({ children }) {
   useEffect(() => {
     try {
       localStorage.setItem(SEEN_TIPS_KEY, JSON.stringify(seenTipIds));
-    } catch (e) {
-      console.warn('Failed to save seen tips:', e);
+    } catch {
+      // Silently ignore localStorage errors (quota exceeded, private browsing, etc.)
     }
   }, [seenTipIds]);
 
@@ -109,8 +109,8 @@ export function ImpProvider({ children }) {
   useEffect(() => {
     try {
       localStorage.setItem(DISMISSED_KEY, isMinimized.toString());
-    } catch (e) {
-      console.warn('Failed to save dismissed state:', e);
+    } catch {
+      // Silently ignore localStorage errors
     }
   }, [isMinimized]);
 
@@ -397,8 +397,8 @@ export function ImpProvider({ children }) {
     setIsFirstVisit(false);
     try {
       localStorage.setItem(FIRST_VISIT_KEY, 'true');
-    } catch (e) {
-      console.warn('Failed to save first visit state:', e);
+    } catch {
+      // Silently ignore localStorage errors
     }
   }, []);
 

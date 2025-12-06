@@ -1,17 +1,15 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import Card from '../common/Card';
 import Button from '../common/Button';
 import Icon from '../common/Icon';
 import PSXSprite from '../common/PSXSprite';
 import Modal from '../common/Modal';
-import StatusBadge from '../common/StatusBadge';
-import { KPICard } from './visualizations';
 import VizFieldSelector from './VizFieldSelector';
 import DateRangeSelector from './DateRangeSelector';
 import FilterBuilder from './FilterBuilder';
 import VizPreview from './VizPreview';
+import { OverviewTab, VisualizationsTab, ScheduleTab, DeliveryTab, AlertsTab } from './tabs';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { useNotification } from '../../hooks/useNotification';
 import { capitalize } from '../../utils/string';
@@ -464,483 +462,55 @@ export default function ReportDetailModal({
 
         {/* Tab Content */}
         <div className={styles.tabContent}>
-          {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div className={styles.overview}>
-              <div className={styles.statsGrid}>
-                <Card className={styles.statCard}>
-                  <PSXSprite sprite="star" size="sm" />
-                  <div className={styles.statInfo}>
-                    <span className={styles.statValue}>{visualizations.length}</span>
-                    <span className={styles.statLabel}>Visualizations</span>
-                  </div>
-                </Card>
-                <Card className={styles.statCard}>
-                  <PSXSprite sprite="hourglass" size="sm" />
-                  <div className={styles.statInfo}>
-                    <span className={styles.statValue}>{formatFrequency(report.frequency)}</span>
-                    <span className={styles.statLabel}>Frequency</span>
-                  </div>
-                </Card>
-                <Card className={styles.statCard}>
-                  <PSXSprite sprite="floppy" size="sm" />
-                  <div className={styles.statInfo}>
-                    <span className={styles.statValue}>{formatDelivery(report.deliveryFormat)}</span>
-                    <span className={styles.statLabel}>Format</span>
-                  </div>
-                </Card>
-                <Card className={styles.statCard}>
-                  <PSXSprite sprite="coin" size="sm" />
-                  <div className={styles.statInfo}>
-                    <span className={styles.statValue}>{report.recipients?.length || 0}</span>
-                    <span className={styles.statLabel}>Recipients</span>
-                  </div>
-                </Card>
-              </div>
-
-              {report.lastSentAt && (
-                <Card className={styles.infoCard}>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Last Sent:</span>
-                    <span className={styles.infoValue}>
-                      {new Date(report.lastSentAt).toLocaleString()}
-                    </span>
-                  </div>
-                </Card>
-              )}
-
-              {report.nextRunAt && isScheduled && (
-                <Card className={styles.infoCard}>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Next Scheduled:</span>
-                    <span className={styles.infoValue}>
-                      {new Date(report.nextRunAt).toLocaleString()}
-                    </span>
-                  </div>
-                </Card>
-              )}
-            </div>
+            <OverviewTab
+              report={report}
+              visualizationsCount={visualizations.length}
+              formatFrequency={formatFrequency}
+              formatDelivery={formatDelivery}
+            />
           )}
 
-          {/* Visualizations Tab */}
           {activeTab === 'visualizations' && (
-            <div className={styles.visualizations}>
-              {/* Add Visualization Buttons */}
-              <div className={styles.vizAddButtons}>
-                {[
-                  { type: 'kpi', label: 'KPI Card', icon: 'coin' },
-                  { type: 'bar', label: 'Bar Chart', icon: 'chartBar' },
-                  { type: 'line', label: 'Line Chart', icon: 'activity' },
-                  { type: 'pie', label: 'Pie Chart', icon: 'pieChart' },
-                ].map((opt) => (
-                  <Button
-                    key={opt.type}
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => handleAddViz(opt.type)}
-                  >
-                    {opt.icon === 'coin' ? (
-                      <PSXSprite sprite="coin" size="xs" />
-                    ) : (
-                      <Icon name={opt.icon} size={14} />
-                    )}
-                    Add {opt.label}
-                  </Button>
-                ))}
-              </div>
-
-              {visualizations.length > 0 ? (
-                <div className={styles.vizGrid}>
-                  {visualizations.map((viz, index) => (
-                    <div key={viz.id} className={styles.vizItem}>
-                      {/* Preview */}
-                      <div className={styles.vizPreview}>
-                        {viz.type === 'kpi' ? (
-                          <KPICard
-                            title={viz.title}
-                            value={1234}
-                            format={viz.format}
-                            showTrend={viz.showTrend}
-                          />
-                        ) : (
-                          <Card className={styles.chartPlaceholder}>
-                            <Icon
-                              name={
-                                viz.type === 'bar'
-                                  ? 'chartBar'
-                                  : viz.type === 'line'
-                                    ? 'activity'
-                                    : 'pieChart'
-                              }
-                              size={32}
-                            />
-                            <span className={styles.chartTitle}>{viz.title}</span>
-                            <span className={styles.chartType}>
-                              {capitalize(viz.type)} Chart
-                            </span>
-                          </Card>
-                        )}
-                      </div>
-                      {/* Actions */}
-                      <div className={styles.vizItemActions}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditViz(viz, index)}
-                          aria-label={`Edit ${viz.title}`}
-                        >
-                          <Icon name="edit" size={14} />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleRemoveViz(index)}
-                          aria-label={`Delete ${viz.title}`}
-                        >
-                          <Icon name="trash" size={14} />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.emptyState}>
-                  <PSXSprite sprite="star" size="lg" />
-                  <p>No visualizations configured</p>
-                  <p className={styles.emptyHint}>
-                    Click a button above to add KPI cards or charts
-                  </p>
-                </div>
-              )}
-            </div>
+            <VisualizationsTab
+              visualizations={visualizations}
+              onAddViz={handleAddViz}
+              onEditViz={handleEditViz}
+              onRemoveViz={handleRemoveViz}
+            />
           )}
 
-          {/* Schedule Tab */}
           {activeTab === 'schedule' && (
-            <div className={styles.schedule}>
-              <Card className={styles.scheduleCard}>
-                <h4 className={styles.sectionTitle}>Schedule Settings</h4>
-                <div className={styles.scheduleInfo}>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Frequency:</span>
-                    <span className={styles.infoValue}>{formatFrequency(report.frequency)}</span>
-                  </div>
-                  {isScheduled && (
-                    <>
-                      {schedule.dayOfWeek && (
-                        <div className={styles.infoRow}>
-                          <span className={styles.infoLabel}>Day:</span>
-                          <span className={styles.infoValue}>
-                            {capitalize(schedule.dayOfWeek)}
-                          </span>
-                        </div>
-                      )}
-                      {schedule.dayOfMonth && (
-                        <div className={styles.infoRow}>
-                          <span className={styles.infoLabel}>Day of Month:</span>
-                          <span className={styles.infoValue}>{schedule.dayOfMonth}</span>
-                        </div>
-                      )}
-                      {schedule.time && (
-                        <div className={styles.infoRow}>
-                          <span className={styles.infoLabel}>Time:</span>
-                          <span className={styles.infoValue}>{schedule.time}</span>
-                        </div>
-                      )}
-                      {schedule.timezone && (
-                        <div className={styles.infoRow}>
-                          <span className={styles.infoLabel}>Timezone:</span>
-                          <span className={styles.infoValue}>{schedule.timezone}</span>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </Card>
-            </div>
+            <ScheduleTab
+              report={report}
+              formatFrequency={formatFrequency}
+            />
           )}
 
-          {/* Delivery Tab */}
           {activeTab === 'delivery' && (
-            <div className={styles.delivery}>
-              <Card className={styles.deliveryCard}>
-                <h4 className={styles.sectionTitle}>Send Report</h4>
-
-                <div className={styles.sendSection}>
-                  <div className={styles.testEmailRow}>
-                    <input
-                      type="email"
-                      className={styles.emailInput}
-                      placeholder="test@example.com"
-                      value={testEmail}
-                      onChange={(e) => setTestEmail(e.target.value)}
-                    />
-                    <Button
-                      variant="secondary"
-                      onClick={handleSendTest}
-                      disabled={sendingTest || !testEmail.trim()}
-                    >
-                      {sendingTest ? 'Sending...' : 'Send Test'}
-                    </Button>
-                  </div>
-
-                  {onSendNow && isScheduled && (
-                    <Button variant="primary" onClick={handleSendNow}>
-                      <Icon name="mail" size={14} />
-                      Send Now to All Recipients
-                    </Button>
-                  )}
-
-                  {sendResult && (
-                    <div
-                      className={`${styles.sendResult} ${sendResult.success ? styles.success : styles.error}`}
-                    >
-                      {sendResult.message}
-                    </div>
-                  )}
-                </div>
-              </Card>
-
-              {report.recipients?.length > 0 && (
-                <Card className={styles.recipientsCard}>
-                  <h4 className={styles.sectionTitle}>Recipients</h4>
-                  <div className={styles.recipientsList}>
-                    {report.recipients.map((email) => (
-                      <div key={email} className={styles.recipient}>
-                        <Icon name="mail" size={14} />
-                        <span>{email}</span>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              )}
-            </div>
+            <DeliveryTab
+              report={report}
+              testEmail={testEmail}
+              onTestEmailChange={setTestEmail}
+              onSendTest={handleSendTest}
+              onSendNow={onSendNow ? handleSendNow : undefined}
+              sendingTest={sendingTest}
+              sendResult={sendResult}
+            />
           )}
 
-          {/* Alerts Tab */}
           {activeTab === 'alerts' && (
-            <div className={styles.alerts}>
-              <div className={styles.alertsHeader}>
-                <h4 className={styles.sectionTitle}>Report Alerts</h4>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setShowAlertForm(!showAlertForm)}
-                >
-                  <Icon name={showAlertForm ? 'x' : 'plus'} size={14} />
-                  {showAlertForm ? 'Cancel' : 'Add Alert'}
-                </Button>
-              </div>
-
-              {/* Alert Creation Form */}
-              {showAlertForm && (
-                <Card className={styles.alertForm}>
-                  <div className={styles.formField}>
-                    <label htmlFor="alert-type">Alert Type</label>
-                    <select
-                      id="alert-type"
-                      value={alertFormData.type}
-                      onChange={(e) => setAlertFormData({ ...alertFormData, type: e.target.value })}
-                    >
-                      <option value="metric_threshold">Metric Threshold</option>
-                      <option value="trend_detection">Trend Detection</option>
-                      <option value="data_freshness">Data Freshness</option>
-                    </select>
-                  </div>
-
-                  {/* Metric Threshold Fields */}
-                  {alertFormData.type === 'metric_threshold' && (
-                    <>
-                      <div className={styles.formField}>
-                        <label htmlFor="alert-metric">Metric</label>
-                        <input
-                          type="text"
-                          id="alert-metric"
-                          placeholder="e.g., spend, roas, impressions"
-                          value={alertFormData.metric}
-                          onChange={(e) => setAlertFormData({ ...alertFormData, metric: e.target.value })}
-                        />
-                      </div>
-                      <div className={styles.formRow}>
-                        <div className={styles.formField}>
-                          <label htmlFor="alert-condition">Condition</label>
-                          <select
-                            id="alert-condition"
-                            value={alertFormData.condition}
-                            onChange={(e) => setAlertFormData({ ...alertFormData, condition: e.target.value })}
-                          >
-                            <option value="gt">Greater than</option>
-                            <option value="lt">Less than</option>
-                            <option value="eq">Equal to</option>
-                            <option value="gte">Greater or equal</option>
-                            <option value="lte">Less or equal</option>
-                          </select>
-                        </div>
-                        <div className={styles.formField}>
-                          <label htmlFor="alert-threshold">Threshold</label>
-                          <input
-                            type="number"
-                            id="alert-threshold"
-                            placeholder="e.g., 1000"
-                            value={alertFormData.threshold}
-                            onChange={(e) => setAlertFormData({ ...alertFormData, threshold: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Trend Detection Fields */}
-                  {alertFormData.type === 'trend_detection' && (
-                    <>
-                      <div className={styles.formField}>
-                        <label htmlFor="alert-trend-metric">Metric</label>
-                        <input
-                          type="text"
-                          id="alert-trend-metric"
-                          placeholder="e.g., roas, cpa"
-                          value={alertFormData.metric}
-                          onChange={(e) => setAlertFormData({ ...alertFormData, metric: e.target.value })}
-                        />
-                      </div>
-                      <div className={styles.formRow}>
-                        <div className={styles.formField}>
-                          <label htmlFor="alert-change-percent">Change %</label>
-                          <input
-                            type="number"
-                            id="alert-change-percent"
-                            placeholder="e.g., 20"
-                            value={alertFormData.changePercent}
-                            onChange={(e) => setAlertFormData({ ...alertFormData, changePercent: e.target.value })}
-                          />
-                        </div>
-                        <div className={styles.formField}>
-                          <label htmlFor="alert-period">Period</label>
-                          <select
-                            id="alert-period"
-                            value={alertFormData.period}
-                            onChange={(e) => setAlertFormData({ ...alertFormData, period: e.target.value })}
-                          >
-                            <option value="wow">Week over Week</option>
-                            <option value="mom">Month over Month</option>
-                            <option value="dod">Day over Day</option>
-                          </select>
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Data Freshness Fields */}
-                  {alertFormData.type === 'data_freshness' && (
-                    <>
-                      <div className={styles.formField}>
-                        <label htmlFor="alert-max-hours">Max Hours Stale</label>
-                        <input
-                          type="number"
-                          id="alert-max-hours"
-                          placeholder="e.g., 24"
-                          value={alertFormData.maxHoursStale}
-                          onChange={(e) => setAlertFormData({ ...alertFormData, maxHoursStale: e.target.value })}
-                        />
-                      </div>
-                      <div className={styles.formField}>
-                        <label htmlFor="alert-platform">Platform (optional)</label>
-                        <input
-                          type="text"
-                          id="alert-platform"
-                          placeholder="e.g., meta_ads"
-                          value={alertFormData.platformId}
-                          onChange={(e) => setAlertFormData({ ...alertFormData, platformId: e.target.value })}
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  <div className={styles.formActions}>
-                    <Button variant="primary" onClick={handleCreateAlert}>
-                      Create Alert
-                    </Button>
-                  </div>
-                </Card>
-              )}
-
-              {/* Alerts List */}
-              {alertsLoading ? (
-                <div className={styles.emptyState}>
-                  <PSXSprite sprite="hourglass" size="md" animation="spin" />
-                  <p>Loading alerts...</p>
-                </div>
-              ) : alerts.length > 0 ? (
-                <div className={styles.alertsList}>
-                  {alerts.map((alert) => (
-                    <Card key={alert.id} className={styles.alertItem}>
-                      <div className={styles.alertInfo}>
-                        <div className={styles.alertHeader}>
-                          <span className={styles.alertType}>
-                            {alert.type === 'metric_threshold' && 'Metric Threshold'}
-                            {alert.type === 'trend_detection' && 'Trend Detection'}
-                            {alert.type === 'data_freshness' && 'Data Freshness'}
-                          </span>
-                          <StatusBadge
-                            status={alert.isActive ? 'active' : 'inactive'}
-                            size="sm"
-                          />
-                        </div>
-                        <div className={styles.alertConfig}>
-                          {alert.type === 'metric_threshold' && (
-                            <span>
-                              {alert.config?.metric}{' '}
-                              {alert.config?.condition === 'gt' && '>'}
-                              {alert.config?.condition === 'lt' && '<'}
-                              {alert.config?.condition === 'eq' && '='}
-                              {alert.config?.condition === 'gte' && '≥'}
-                              {alert.config?.condition === 'lte' && '≤'}{' '}
-                              {alert.config?.threshold}
-                            </span>
-                          )}
-                          {alert.type === 'trend_detection' && (
-                            <span>
-                              {alert.config?.metric} changes &gt; {alert.config?.changePercent}%{' '}
-                              ({alert.config?.period?.toUpperCase()})
-                            </span>
-                          )}
-                          {alert.type === 'data_freshness' && (
-                            <span>
-                              Stale after {alert.config?.maxHoursStale} hours
-                              {alert.config?.platformId && ` (${alert.config.platformId})`}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className={styles.alertActions}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleToggleAlert(alert.id, alert.isActive)}
-                        >
-                          {alert.isActive ? 'Disable' : 'Enable'}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteAlert(alert.id)}
-                        >
-                          <Icon name="trash" size={14} />
-                        </Button>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.emptyState}>
-                  <PSXSprite sprite="tubeRed" size="lg" />
-                  <p>No alerts configured</p>
-                  <p className={styles.emptyHint}>
-                    Create alerts to get notified when metrics exceed thresholds
-                  </p>
-                </div>
-              )}
-            </div>
+            <AlertsTab
+              alerts={alerts}
+              alertsLoading={alertsLoading}
+              showAlertForm={showAlertForm}
+              alertFormData={alertFormData}
+              onToggleAlertForm={() => setShowAlertForm(!showAlertForm)}
+              onAlertFormChange={setAlertFormData}
+              onCreateAlert={handleCreateAlert}
+              onToggleAlert={handleToggleAlert}
+              onDeleteAlert={handleDeleteAlert}
+            />
           )}
         </div>
 

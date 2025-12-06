@@ -99,7 +99,9 @@ PieChartViz.propTypes = {
   /** Optional subtitle */
   subtitle: PropTypes.string,
   /** Chart data array */
-  data: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.arrayOf(
+    PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
+  ),
   /** Key for segment names */
   nameKey: PropTypes.string,
   /** Key for segment values */

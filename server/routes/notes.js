@@ -1,6 +1,12 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import {
+  noteRepository,
+  sourceRepository,
+  etlRepository,
+  kpiRepository,
+  reportRepository,
+} from '../services/repositories/index.js';
+import { AppError } from '../errors/AppError.js';
 import { validateUUID, validateEntityId } from '../services/validators.js';
 import { requireAuth } from '../middleware/auth.js';
 import { requireClientAccess, requireMinimumRole } from '../middleware/clientAccess.js';
@@ -38,16 +44,16 @@ async function attachNoteEntityClientId(req, res, next) {
     let entity;
     switch (entityType) {
       case 'source':
-        entity = await supabaseService.getSource(validatedEntityId);
+        entity = await sourceRepository.findById(validatedEntityId);
         break;
       case 'etl':
-        entity = await supabaseService.getETLProcess(validatedEntityId);
+        entity = await etlRepository.findById(validatedEntityId);
         break;
       case 'kpi':
-        entity = await supabaseService.getKPI(validatedEntityId);
+        entity = await kpiRepository.findById(validatedEntityId);
         break;
       case 'report':
-        entity = await supabaseService.getEnhancedReport(validatedEntityId);
+        entity = await reportRepository.findById(validatedEntityId);
         break;
     }
 
@@ -81,7 +87,7 @@ router.get('/:entityType/:entityId', attachNoteEntityClientId, requireClientAcce
   try {
     const { entityType } = req.params;
     const entityId = validateEntityIdByType(entityType, req.params.entityId);
-    const notes = await supabaseService.getNotes(entityType, entityId);
+    const notes = await noteRepository.findByEntity(entityType, entityId);
     res.json({ notes });
   } catch (error) {
     next(error);
@@ -104,7 +110,7 @@ router.post('/:entityType/:entityId', attachNoteEntityClientId, requireClientAcc
       throw new AppError('Note content is required', 400);
     }
 
-    const result = await supabaseService.saveNote(entityType, entityId, { note, updatedBy });
+    const result = await noteRepository.upsertByEntity(entityType, entityId, { note, updatedBy });
     res.json({ note: result });
   } catch (error) {
     next(error);
@@ -119,7 +125,7 @@ router.delete('/:entityType/:entityId', attachNoteEntityClientId, requireClientA
   try {
     const { entityType } = req.params;
     const entityId = validateEntityIdByType(entityType, req.params.entityId);
-    const deleted = await supabaseService.deleteNote(entityType, entityId);
+    const deleted = await noteRepository.deleteByEntity(entityType, entityId);
     if (!deleted) {
       throw new AppError('Note not found', 404);
     }

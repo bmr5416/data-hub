@@ -64,8 +64,7 @@ export function AuthProvider({ children }) {
 
       const data = await response.json();
       return data.user;
-    } catch (err) {
-      console.error('Profile fetch error:', err);
+    } catch {
       return null;
     }
   }, []);
@@ -97,7 +96,6 @@ export function AuthProvider({ children }) {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
         if (sessionError) {
-          console.error('Session error:', sessionError);
           if (mounted) {
             setAuthState(AUTH_STATES.UNAUTHENTICATED);
           }
@@ -107,8 +105,7 @@ export function AuthProvider({ children }) {
         if (mounted) {
           await handleSession(session);
         }
-      } catch (err) {
-        console.error('Auth init error:', err);
+      } catch {
         if (mounted) {
           setAuthState(AUTH_STATES.UNAUTHENTICATED);
         }

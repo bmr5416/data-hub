@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { supabaseService } from '../services/supabase.js';
 import { reportService } from '../services/reportService.js';
 import { reportAlertService } from '../services/reportAlertService.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { AppError } from '../errors/AppError.js';
 import { validateEntityId } from '../services/validators.js';
 import { heavyLimiter } from '../middleware/rateLimiter.js';
 import { extendedTimeout } from '../middleware/timeout.js';
@@ -154,8 +154,9 @@ router.get('/:id/preview', attachReportClientId, requireClientAccess, heavyLimit
     const preview = await reportService.getReportPreview(reportId);
     res.json({ preview });
   } catch (error) {
-    if (error.message.includes('not found')) {
-      throw new AppError(error.message, 404);
+    // Check for AppError with NOT_FOUND code or 404 status
+    if (error.code === 'NOT_FOUND' || error.statusCode === 404) {
+      throw AppError.notFound('Report', req.params.id);
     }
     next(error);
   }
@@ -174,8 +175,9 @@ router.post('/:id/viz-preview', attachReportClientId, requireClientAccess, async
     const previewData = await reportService.getVisualizationPreview(reportId, vizConfig);
     res.json(previewData);
   } catch (error) {
-    if (error.message.includes('not found')) {
-      throw new AppError(error.message, 404);
+    // Check for AppError with NOT_FOUND code or 404 status
+    if (error.code === 'NOT_FOUND' || error.statusCode === 404) {
+      throw AppError.notFound('Report', req.params.id);
     }
     next(error);
   }
@@ -193,11 +195,13 @@ router.post('/:id/send', attachReportClientId, requireClientAccess, requireMinim
       ...result,
     });
   } catch (error) {
-    if (error.message.includes('not found')) {
-      throw new AppError(error.message, 404);
+    // Check for AppError with NOT_FOUND code or 404 status
+    if (error.code === 'NOT_FOUND' || error.statusCode === 404) {
+      throw AppError.notFound('Report', req.params.id);
     }
-    if (error.message.includes('No recipients')) {
-      throw new AppError(error.message, 400);
+    // Check for validation errors (no recipients)
+    if (error.code === 'VALIDATION_ERROR' || error.message.includes('No recipients')) {
+      throw AppError.badRequest(error.message);
     }
     next(error);
   }
@@ -224,8 +228,9 @@ router.post('/:id/test-email', attachReportClientId, requireClientAccess, requir
       ...result,
     });
   } catch (error) {
-    if (error.message.includes('not found')) {
-      throw new AppError(error.message, 404);
+    // Check for AppError with NOT_FOUND code or 404 status
+    if (error.code === 'NOT_FOUND' || error.statusCode === 404) {
+      throw AppError.notFound('Report', req.params.id);
     }
     next(error);
   }
@@ -247,8 +252,9 @@ router.post('/:id/schedule', attachReportClientId, requireClientAccess, requireM
       report,
     });
   } catch (error) {
-    if (error.message.includes('not found')) {
-      throw new AppError(error.message, 404);
+    // Check for AppError with NOT_FOUND code or 404 status
+    if (error.code === 'NOT_FOUND' || error.statusCode === 404) {
+      throw AppError.notFound('Report', req.params.id);
     }
     next(error);
   }
@@ -274,9 +280,11 @@ router.get('/:id/delivery-history', attachReportClientId, requireClientAccess, a
   try {
     const reportId = validateEntityId(req.params.id, 'reportId');
     const { limit = 50 } = req.query;
+    // Validate limit with bounds checking
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 50, 1), 500);
     const history = await supabaseService.getReportDeliveryHistory(
       reportId,
-      parseInt(limit, 10)
+      parsedLimit
     );
     res.json({ history });
   } catch (error) {
@@ -308,8 +316,9 @@ router.post('/:id/alerts', attachReportClientId, requireClientAccess, requireMin
     const alert = await reportAlertService.createAlert(alertData);
     res.status(201).json({ alert });
   } catch (error) {
-    if (error.message.includes('required') || error.message.includes('Invalid')) {
-      throw new AppError(error.message, 400);
+    // Check for validation errors
+    if (error.code === 'VALIDATION_ERROR' || error.message.includes('required') || error.message.includes('Invalid')) {
+      throw AppError.badRequest(error.message);
     }
     next(error);
   }
@@ -341,8 +350,9 @@ router.put('/:id/alerts/:alertId', attachReportClientId, requireClientAccess, re
     }
     res.json({ alert });
   } catch (error) {
-    if (error.message.includes('required') || error.message.includes('Invalid')) {
-      throw new AppError(error.message, 400);
+    // Check for validation errors
+    if (error.code === 'VALIDATION_ERROR' || error.message.includes('required') || error.message.includes('Invalid')) {
+      throw AppError.badRequest(error.message);
     }
     next(error);
   }
@@ -368,8 +378,9 @@ router.post('/:id/alerts/:alertId/test', attachReportClientId, requireClientAcce
     const result = await reportAlertService.testAlert(alertId);
     res.json({ result });
   } catch (error) {
-    if (error.message.includes('not found')) {
-      throw new AppError(error.message, 404);
+    // Check for AppError with NOT_FOUND code or 404 status
+    if (error.code === 'NOT_FOUND' || error.statusCode === 404) {
+      throw AppError.notFound('Alert', req.params.alertId);
     }
     next(error);
   }
@@ -381,9 +392,11 @@ router.get('/:id/alerts/:alertId/history', attachReportClientId, requireClientAc
     validateEntityId(req.params.id, 'reportId');
     const alertId = validateEntityId(req.params.alertId, 'alertId');
     const { limit = 100 } = req.query;
+    // Validate limit with bounds checking
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 100, 1), 500);
     const history = await reportAlertService.getAlertHistory(
       alertId,
-      parseInt(limit, 10)
+      parsedLimit
     );
     res.json({ history });
   } catch (error) {

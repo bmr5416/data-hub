@@ -9,7 +9,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { supabase } from '../services/supabaseClient.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { AppError } from '../errors/AppError.js';
 import { requireAuth, requireAdmin } from '../middleware/auth.js';
 import logger from '../utils/logger.js';
 
@@ -38,14 +38,20 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * GET /api/admin/users
  * List all users with their profiles and assignments
  */
-router.get('/users', async (req, res, next) => {
+router.get('/users', adminLimiter, async (req, res, next) => {
   try {
     if (!supabase) {
       throw new AppError('Database not configured', 500);
     }
 
-    const page = parseInt(req.query.page) || 1;
-    const perPage = Math.min(parseInt(req.query.perPage) || 50, 100);
+    // Validate pagination with bounds checking
+    const MIN_PAGE = 1;
+    const MAX_PAGE = 10000;
+    const MIN_PER_PAGE = 1;
+    const MAX_PER_PAGE = 100;
+
+    const page = Math.min(Math.max(parseInt(req.query.page, 10) || 1, MIN_PAGE), MAX_PAGE);
+    const perPage = Math.min(Math.max(parseInt(req.query.perPage, 10) || 50, MIN_PER_PAGE), MAX_PER_PAGE);
 
     // List users from Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.admin.listUsers({
@@ -131,7 +137,7 @@ router.get('/users', async (req, res, next) => {
  * GET /api/admin/users/:id
  * Get a specific user with full details
  */
-router.get('/users/:id', async (req, res, next) => {
+router.get('/users/:id', adminLimiter, async (req, res, next) => {
   try {
     if (!supabase) {
       throw new AppError('Database not configured', 500);
@@ -270,6 +276,9 @@ router.post('/users', adminLimiter, async (req, res, next) => {
         .eq('id', newUser.id);
     }
 
+    // Track warnings for partial failures
+    const warnings = [];
+
     // Create client assignments
     if (assignedClients.length > 0) {
       const assignmentRecords = assignedClients.map((clientId) => ({
@@ -289,7 +298,12 @@ router.post('/users', adminLimiter, async (req, res, next) => {
           error: assignError.message,
           component: 'Admin',
         });
-        // Don't fail - user was created
+        // Don't fail - user was created, but warn the caller
+        warnings.push({
+          type: 'CLIENT_ASSIGNMENTS_FAILED',
+          message: 'User created but client assignments failed. Please assign clients manually.',
+          details: assignError.message,
+        });
       }
     }
 
@@ -332,6 +346,7 @@ router.post('/users', adminLimiter, async (req, res, next) => {
         assignedClients,
         inviteSent,
       },
+      warnings: warnings.length > 0 ? warnings : undefined,
     });
   } catch (error) {
     next(error);

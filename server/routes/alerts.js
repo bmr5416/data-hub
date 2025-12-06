@@ -6,9 +6,9 @@
  */
 
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
+import { kpiRepository, kpiAlertRepository } from '../services/repositories/index.js';
 import { evaluateKPIAlerts } from '../services/alertEvaluator.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { AppError } from '../errors/AppError.js';
 import { validateUUID } from '../services/validators.js';
 import { requireAuth } from '../middleware/auth.js';
 import { requireClientAccess, requireMinimumRole } from '../middleware/clientAccess.js';
@@ -31,7 +31,7 @@ async function attachKpiClientId(req, res, next) {
     if (!kpiId) return next();
 
     validateUUID(kpiId, 'kpiId');
-    const kpi = await supabaseService.getKPI(kpiId);
+    const kpi = await kpiRepository.findById(kpiId);
     if (!kpi) {
       throw AppError.notFound('KPI', kpiId);
     }
@@ -55,13 +55,13 @@ async function attachAlertClientId(req, res, next) {
     if (!alertId) return next();
 
     validateUUID(alertId, 'alertId');
-    const alert = await supabaseService.getKPIAlert(alertId);
+    const alert = await kpiAlertRepository.findById(alertId);
     if (!alert) {
       throw AppError.notFound('Alert', alertId);
     }
 
     // Get parent KPI to find client_id
-    const kpi = await supabaseService.getKPI(alert.kpiId);
+    const kpi = await kpiRepository.findById(alert.kpiId);
     if (!kpi) {
       throw AppError.notFound('KPI', alert.kpiId);
     }
@@ -82,7 +82,7 @@ async function attachAlertClientId(req, res, next) {
  */
 router.get('/kpis/:kpiId/alerts', attachKpiClientId, requireClientAccess, async (req, res, next) => {
   try {
-    const alerts = await supabaseService.getKPIAlerts(req.params.kpiId);
+    const alerts = await kpiAlertRepository.findByKpiId(req.params.kpiId);
     res.json({ alerts });
   } catch (error) {
     next(error);
@@ -106,7 +106,7 @@ router.post('/kpis/:kpiId/alerts', attachKpiClientId, requireClientAccess, requi
       throw new AppError(`Invalid condition. Must be one of: ${VALID_CONDITIONS.join(', ')}`, 400);
     }
 
-    const alert = await supabaseService.createKPIAlert({
+    const alert = await kpiAlertRepository.create({
       kpiId,
       condition,
       threshold,
@@ -134,7 +134,7 @@ router.put('/alerts/:alertId', attachAlertClientId, requireClientAccess, require
       throw new AppError(`Invalid condition. Must be one of: ${VALID_CONDITIONS.join(', ')}`, 400);
     }
 
-    const alert = await supabaseService.updateKPIAlert(alertId, {
+    const alert = await kpiAlertRepository.update(alertId, {
       condition,
       threshold,
       channels,
@@ -154,7 +154,7 @@ router.put('/alerts/:alertId', attachAlertClientId, requireClientAccess, require
  */
 router.delete('/alerts/:alertId', attachAlertClientId, requireClientAccess, requireMinimumRole('editor'), async (req, res, next) => {
   try {
-    await supabaseService.deleteKPIAlert(req.params.alertId);
+    await kpiAlertRepository.delete(req.params.alertId);
     res.json({ success: true });
   } catch (error) {
     next(error);
@@ -168,7 +168,7 @@ router.delete('/alerts/:alertId', attachAlertClientId, requireClientAccess, requ
 router.get('/alerts/:alertId/history', attachAlertClientId, requireClientAccess, async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit, 10) || 100;
-    const history = await supabaseService.getAlertHistory(req.params.alertId, limit);
+    const history = await kpiAlertRepository.findHistory(req.params.alertId, limit);
     res.json({ history });
   } catch (error) {
     next(error);

@@ -5,9 +5,12 @@
  * - Report PDF generation with Win98 dungeon styling
  * - HTML template rendering with Handlebars
  * - Page setup and formatting options
+ *
+ * Environment-aware browser loading:
+ * - Production (Vercel): Uses @sparticuz/chromium + puppeteer-core
+ * - Development: Uses full puppeteer with bundled Chromium
  */
 
-import puppeteer from 'puppeteer';
 import Handlebars from 'handlebars';
 import { capitalize } from '../utils/string.js';
 import chartRenderService from './chartRenderService.js';
@@ -320,23 +323,57 @@ Handlebars.registerHelper('formatNumber', (value) => {
 class PDFService {
   constructor() {
     // No persistent browser - create fresh instance per request to prevent leaks
-    this.defaultTimeout = 30000; // 30 second timeout
+    // Reduced timeout for serverless (Vercel Hobby has 10s limit)
+    this.defaultTimeout = process.env.NODE_ENV === 'production' ? 8000 : 30000;
   }
 
   /**
    * Create a new browser instance for PDF generation
    * Each request gets a fresh browser to prevent memory leaks
+   *
+   * Environment-aware:
+   * - Production (Vercel): Uses @sparticuz/chromium + puppeteer-core
+   * - Development: Uses full puppeteer with bundled Chromium
    */
   async createBrowser() {
-    return puppeteer.launch({
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-      ],
-    });
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    if (isProduction) {
+      // Serverless environment - use @sparticuz/chromium
+      const [chromiumModule, puppeteerModule] = await Promise.all([
+        import('@sparticuz/chromium'),
+        import('puppeteer-core'),
+      ]);
+
+      const chromium = chromiumModule.default;
+      const puppeteer = puppeteerModule.default;
+
+      // Configure chromium for serverless
+      chromium.setHeadlessMode = true;
+      chromium.setGraphicsMode = false;
+
+      return puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
+      });
+    } else {
+      // Development environment - use full puppeteer
+      const puppeteerModule = await import('puppeteer');
+      const puppeteer = puppeteerModule.default;
+
+      return puppeteer.launch({
+        headless: 'new',
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+        ],
+      });
+    }
   }
 
   /**

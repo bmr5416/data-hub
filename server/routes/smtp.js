@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
+import { smtpConfigRepository } from '../services/repositories/index.js';
 import { emailService } from '../services/emailService.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { AppError } from '../errors/AppError.js';
 import { validateUUID } from '../services/validators.js';
 
 const router = Router();
@@ -15,7 +15,7 @@ const router = Router();
 // GET /api/smtp - List all SMTP configurations
 router.get('/', async (_req, res, next) => {
   try {
-    const configs = await supabaseService.getSmtpConfigs();
+    const configs = await smtpConfigRepository.findAll();
     // Remove passwords from response
     const safeConfigs = configs.map((config) => ({
       ...config,
@@ -31,7 +31,7 @@ router.get('/', async (_req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const smtpId = validateUUID(req.params.id, 'smtpId');
-    const config = await supabaseService.getSmtpConfig(smtpId);
+    const config = await smtpConfigRepository.findById(smtpId);
     if (!config) {
       throw new AppError('SMTP configuration not found', 404);
     }
@@ -60,7 +60,7 @@ router.post('/', async (req, res, next) => {
       throw new AppError('From email is required', 400);
     }
 
-    const config = await supabaseService.createSmtpConfig({
+    const config = await smtpConfigRepository.create({
       name: name || 'Default',
       host,
       port: port || 587,
@@ -87,7 +87,7 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const smtpId = validateUUID(req.params.id, 'smtpId');
-    const existing = await supabaseService.getSmtpConfig(smtpId);
+    const existing = await smtpConfigRepository.findById(smtpId);
     if (!existing) {
       throw new AppError('SMTP configuration not found', 404);
     }
@@ -105,7 +105,7 @@ router.put('/:id', async (req, res, next) => {
     if (fromName !== undefined) updateData.fromName = fromName;
     if (isDefault !== undefined) updateData.isDefault = isDefault;
 
-    const config = await supabaseService.updateSmtpConfig(smtpId, updateData);
+    const config = await smtpConfigRepository.update(smtpId, updateData);
 
     res.json({
       config: {
@@ -122,12 +122,12 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const smtpId = validateUUID(req.params.id, 'smtpId');
-    const existing = await supabaseService.getSmtpConfig(smtpId);
+    const existing = await smtpConfigRepository.findById(smtpId);
     if (!existing) {
       throw new AppError('SMTP configuration not found', 404);
     }
 
-    await supabaseService.deleteSmtpConfig(smtpId);
+    await smtpConfigRepository.delete(smtpId);
     res.json({ success: true });
   } catch (error) {
     next(error);
@@ -138,7 +138,7 @@ router.delete('/:id', async (req, res, next) => {
 router.post('/:id/verify', async (req, res, next) => {
   try {
     const smtpId = validateUUID(req.params.id, 'smtpId');
-    const config = await supabaseService.getSmtpConfig(smtpId);
+    const config = await smtpConfigRepository.findById(smtpId);
     if (!config) {
       throw new AppError('SMTP configuration not found', 404);
     }
@@ -147,7 +147,7 @@ router.post('/:id/verify', async (req, res, next) => {
 
     if (result.success) {
       // Update verification status
-      await supabaseService.updateSmtpConfig(smtpId, {
+      await smtpConfigRepository.update(smtpId, {
         isVerified: true,
         lastVerifiedAt: new Date().toISOString(),
       });
@@ -169,7 +169,7 @@ router.post('/:id/test', async (req, res, next) => {
       throw new AppError('Test email address is required', 400);
     }
 
-    const config = await supabaseService.getSmtpConfig(smtpId);
+    const config = await smtpConfigRepository.findById(smtpId);
     if (!config) {
       throw new AppError('SMTP configuration not found', 404);
     }

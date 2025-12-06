@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { lineageRepository } from '../services/repositories/index.js';
+import { AppError } from '../errors/AppError.js';
 import { validateEntityId } from '../services/validators.js';
 import { requireAuth } from '../middleware/auth.js';
 import { requireClientAccess, requireMinimumRole } from '../middleware/clientAccess.js';
@@ -19,7 +19,7 @@ async function attachLineageClientId(req, res, next) {
     if (!lineageId) return next();
 
     const validatedId = validateEntityId(lineageId, 'lineageId');
-    const lineage = await supabaseService.getLineage(validatedId);
+    const lineage = await lineageRepository.findById(validatedId);
     if (!lineage) {
       throw new AppError('Lineage connection not found', 404);
     }
@@ -63,7 +63,7 @@ function validateLineageData(data) {
 router.get('/:clientId', requireClientAccess, async (req, res, next) => {
   try {
     const clientId = validateEntityId(req.params.clientId, 'clientId');
-    const lineage = await supabaseService.getClientLineage(clientId);
+    const lineage = await lineageRepository.findByClientId(clientId);
     res.json({ lineage });
   } catch (error) {
     next(error);
@@ -88,7 +88,7 @@ router.post('/', extractClientIdFromBody, requireClientAccess, requireMinimumRol
       throw new AppError(validationErrors.join(', '), 400);
     }
 
-    const lineage = await supabaseService.createLineage(req.body);
+    const lineage = await lineageRepository.create(req.body);
 
     res.status(201).json({ lineage });
   } catch (error) {

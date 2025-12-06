@@ -9,7 +9,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { supabase } from '../services/supabaseClient.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { AppError } from '../errors/AppError.js';
 import { requireAuth } from '../middleware/auth.js';
 import logger from '../utils/logger.js';
 

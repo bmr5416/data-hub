@@ -214,5 +214,7 @@ DynamicEntityForm.propTypes = {
   /** Callback to close the form */
   onClose: PropTypes.func.isRequired,
   /** Optional initial data for editing */
-  initialData: PropTypes.object,
+  initialData: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])
+  ),
 };

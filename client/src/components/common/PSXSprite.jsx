@@ -33,14 +33,12 @@ function PSXSprite({
   const { animConfig, sheetPath, isValid } = useMemo(() => {
     const config = sprites[sprite];
     if (!config) {
-      console.warn(`PSXSprite: Unknown sprite "${sprite}"`);
       return { isValid: false };
     }
 
     const animName = animation || Object.keys(config.animations)[0];
     const anim = config.animations[animName];
     if (!anim) {
-      console.warn(`PSXSprite: Unknown animation "${animName}" for sprite "${sprite}"`);
       return { isValid: false };
     }
 

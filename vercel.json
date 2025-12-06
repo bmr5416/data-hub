@@ -3,11 +3,29 @@
   "buildCommand": "npm run build",
   "outputDirectory": "client/dist",
   "rewrites": [
+    { "source": "/api/cron/:path*", "destination": "/api/cron/:path*" },
     { "source": "/api/:path*", "destination": "/api" }
   ],
   "functions": {
     "api/index.js": {
+      "maxDuration": 10,
       "includeFiles": "server/**"
+    },
+    "api/cron/reports.js": {
+      "maxDuration": 10
+    },
+    "api/cron/alerts.js": {
+      "maxDuration": 10
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/reports",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/alerts",
+      "schedule": "*/15 * * * *"
+    }
+  ]
 }

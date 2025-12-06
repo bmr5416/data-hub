@@ -164,7 +164,12 @@ ReportBuilderWizard.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string,
       platforms: PropTypes.arrayOf(PropTypes.string),
-      fieldSelections: PropTypes.object,
+      fieldSelections: PropTypes.objectOf(
+        PropTypes.shape({
+          dimensions: PropTypes.arrayOf(PropTypes.string),
+          metrics: PropTypes.arrayOf(PropTypes.string),
+        })
+      ),
     })
   ),
   onComplete: PropTypes.func,
