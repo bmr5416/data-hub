@@ -8,7 +8,14 @@
  * - Calculating next run times for scheduled reports
  */
 
-import { supabaseService } from './supabase.js';
+import {
+  reportRepository,
+  clientRepository,
+  warehouseRepository,
+  platformDataRepository,
+  deliveryHistoryRepository,
+  scheduledJobRepository,
+} from './repositories/index.js';
 import { pdfService } from './pdfService.js';
 import { emailService } from './emailService.js';
 import { DateTime } from 'luxon';
@@ -25,13 +32,13 @@ class ReportService {
    * @returns {Object} Report data with visualization values
    */
   async getReportPreview(reportId) {
-    const report = await supabaseService.getEnhancedReport(reportId);
+    const report = await reportRepository.findById(reportId);
     if (!report) {
       throw new Error(`Report ${reportId} not found`);
     }
 
     // Get client info
-    const client = await supabaseService.getClient(report.clientId);
+    const client = await clientRepository.findById(report.clientId);
     if (!client) {
       throw new Error(`Client ${report.clientId} not found`);
     }
@@ -41,7 +48,7 @@ class ReportService {
     let platformData = {};
 
     if (report.warehouseId) {
-      const warehouse = await supabaseService.getWarehouseById(report.warehouseId);
+      const warehouse = await warehouseRepository.findById(report.warehouseId);
       if (warehouse) {
         warehouseData = warehouse;
 
@@ -50,7 +57,7 @@ class ReportService {
         const platformDataResults = await Promise.all(
           platforms.map(async (platformId) => {
             try {
-              const result = await supabaseService.getPlatformData(report.clientId, platformId);
+              const result = await platformDataRepository.findByClientId(report.clientId, platformId);
               return { platformId, data: result.data, error: null };
             } catch (error) {
               log.error(`Failed to get platform data for ${platformId}`, { platformId, error: error.message });
@@ -213,7 +220,7 @@ class ReportService {
       const historicalResults = await Promise.all(
         platformIds.map(async (platformId) => {
           try {
-            const result = await supabaseService.getPlatformDataByDateRange(
+            const result = await platformDataRepository.findByDateRange(
               clientId,
               platformId,
               startDate,
@@ -401,7 +408,7 @@ class ReportService {
    * @returns {Object} Preview data
    */
   async getVisualizationPreview(reportId, vizConfig) {
-    const report = await supabaseService.getEnhancedReport(reportId);
+    const report = await reportRepository.findById(reportId);
     if (!report) {
       throw new Error(`Report ${reportId} not found`);
     }
@@ -412,7 +419,7 @@ class ReportService {
     }
 
     // Get warehouse data
-    const warehouse = await supabaseService.getWarehouseById(warehouseId);
+    const warehouse = await warehouseRepository.findById(warehouseId);
     if (!warehouse) {
       throw new Error(`Warehouse ${warehouseId} not found`);
     }
@@ -429,7 +436,7 @@ class ReportService {
     const platformDataResults = await Promise.all(
       platforms.map(async (platformId) => {
         try {
-          const result = await supabaseService.getPlatformDataByDateRange(
+          const result = await platformDataRepository.findByDateRange(
             report.clientId,
             platformId,
             startDate,
@@ -652,12 +659,12 @@ class ReportService {
   async sendReport(reportId, options = {}) {
     const { isTest = false, testEmail } = options;
 
-    const report = await supabaseService.getEnhancedReport(reportId);
+    const report = await reportRepository.findById(reportId);
     if (!report) {
       throw new Error(`Report ${reportId} not found`);
     }
 
-    const client = await supabaseService.getClient(report.clientId);
+    const client = await clientRepository.findById(report.clientId);
     if (!client) {
       throw new Error(`Client ${report.clientId} not found`);
     }
@@ -672,7 +679,7 @@ class ReportService {
     const previewData = await this.getReportPreview(reportId);
 
     // Create delivery history record
-    const deliveryHistory = await supabaseService.createReportDeliveryHistory({
+    const deliveryHistory = await deliveryHistoryRepository.create({
       reportId,
       deliveryFormat: report.deliveryFormat,
       recipients,
@@ -707,14 +714,14 @@ class ReportService {
       });
 
       // Update delivery history
-      await supabaseService.updateReportDeliveryHistory(deliveryHistory.id, {
+      await deliveryHistoryRepository.update(deliveryHistory.id, {
         status: 'sent',
         fileSize: attachmentBuffer?.length || 0,
       });
 
       // Update report last sent time (only for non-test sends)
       if (!isTest) {
-        await supabaseService.updateEnhancedReport(reportId, {
+        await reportRepository.update(reportId, {
           lastSentAt: new Date().toISOString(),
           sendCount: (report.sendCount || 0) + 1,
         });
@@ -729,7 +736,7 @@ class ReportService {
       };
     } catch (error) {
       // Update delivery history with error
-      await supabaseService.updateReportDeliveryHistory(deliveryHistory.id, {
+      await deliveryHistoryRepository.update(deliveryHistory.id, {
         status: 'failed',
         errorMessage: error.message,
       });
@@ -936,7 +943,7 @@ class ReportService {
     const cronExpression = this.scheduleToCron(scheduleConfig);
 
     // Update report with schedule
-    const updatedReport = await supabaseService.updateEnhancedReport(reportId, {
+    const updatedReport = await reportRepository.update(reportId, {
       scheduleConfig,
       isScheduled: true,
       nextRunAt,
@@ -944,21 +951,20 @@ class ReportService {
     });
 
     // Create or update scheduled job
-    const existingJob = await supabaseService.getScheduledJobByEntity('report_delivery', reportId);
+    const existingJob = await scheduledJobRepository.findByReportId(reportId);
 
     if (existingJob) {
-      await supabaseService.updateScheduledJob(existingJob.id, {
+      await scheduledJobRepository.update(existingJob.id, {
         cronExpression,
         nextRunAt,
-        enabled: true,
+        isActive: true,
       });
     } else {
-      await supabaseService.createScheduledJob({
-        jobType: 'report_delivery',
-        entityId: reportId,
+      await scheduledJobRepository.create({
+        reportId,
         cronExpression,
         nextRunAt,
-        enabled: true,
+        isActive: true,
       });
     }
 
@@ -973,13 +979,13 @@ class ReportService {
    */
   async unscheduleReport(reportId) {
     // Update report
-    const updatedReport = await supabaseService.updateEnhancedReport(reportId, {
+    const updatedReport = await reportRepository.update(reportId, {
       isScheduled: false,
       nextRunAt: null,
     });
 
     // Delete scheduled job
-    await supabaseService.deleteScheduledJobByEntity('report_delivery', reportId);
+    await scheduledJobRepository.deleteByReportId(reportId);
 
     return updatedReport;
   }
@@ -992,7 +998,7 @@ class ReportService {
    * @returns {Object} Send result
    */
   async processScheduledDelivery(reportId) {
-    const report = await supabaseService.getEnhancedReport(reportId);
+    const report = await reportRepository.findById(reportId);
     if (!report) {
       throw new Error(`Report ${reportId} not found`);
     }
@@ -1008,17 +1014,16 @@ class ReportService {
     // Calculate and update next run time
     const nextRunAt = this.calculateNextRunTime(report.scheduleConfig);
 
-    await supabaseService.updateEnhancedReport(reportId, {
+    await reportRepository.update(reportId, {
       nextRunAt,
     });
 
     // Update scheduled job
-    const job = await supabaseService.getScheduledJobByEntity('report_delivery', reportId);
+    const job = await scheduledJobRepository.findByReportId(reportId);
     if (job) {
-      await supabaseService.updateScheduledJob(job.id, {
+      await scheduledJobRepository.update(job.id, {
         lastRunAt: new Date().toISOString(),
         nextRunAt,
-        lastStatus: 'success',
       });
     }
 

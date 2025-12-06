@@ -133,31 +133,31 @@ async function createCustomMapping(clientId, data) {
  * Get a specific custom mapping by ID
  */
 async function getCustomMapping(mappingId) {
-  return await supabaseService.getPlatformMapping(mappingId);
+  return await mappingRepository.findById(mappingId);
 }
 
 /**
  * Update a custom mapping
  */
 async function updateCustomMapping(mappingId, data) {
-  return await supabaseService.updatePlatformMapping(mappingId, data);
+  return await mappingRepository.update(mappingId, data);
 }
 
 /**
  * Delete a custom mapping (reverts to system default)
  */
 async function deleteCustomMapping(mappingId) {
-  return await supabaseService.deletePlatformMapping(mappingId);
+  return await mappingRepository.delete(mappingId);
 }
 
 /**
  * Reset all custom mappings for a client's platform (reverts to system defaults)
  */
 async function resetPlatformMappings(clientId, platformId) {
-  const customMappings = await supabaseService.getClientPlatformMappings(clientId, platformId);
+  const customMappings = await mappingRepository.findByClientAndPlatform(clientId, platformId);
 
   for (const mapping of customMappings) {
-    await supabaseService.deletePlatformMapping(mapping.id);
+    await mappingRepository.delete(mapping.id);
   }
 
   return {

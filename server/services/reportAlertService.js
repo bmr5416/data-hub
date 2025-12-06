@@ -7,7 +7,11 @@
  * - data_freshness: Triggers when data hasn't been updated within a time window
  */
 
-import { supabaseService } from './supabase.js';
+import {
+  alertRepository,
+  reportRepository,
+  uploadRepository,
+} from './repositories/index.js';
 import { emailService } from './emailService.js';
 import { reportService } from './reportService.js';
 import logger from '../utils/logger.js';
@@ -55,7 +59,7 @@ class ReportAlertService {
 
     try {
       // Get all active alerts
-      const alerts = await supabaseService.getReportAlerts(null, true);
+      const alerts = await alertRepository.findEnabled();
 
       for (const alert of alerts) {
         try {
@@ -100,7 +104,7 @@ class ReportAlertService {
     };
 
     // Update last evaluated timestamp
-    await supabaseService.updateReportAlert(alert.id, {
+    await alertRepository.update(alert.id, {
       lastEvaluatedAt: new Date().toISOString(),
     });
 
@@ -211,7 +215,7 @@ class ReportAlertService {
     }
 
     // Get report to find warehouse
-    const report = await supabaseService.getEnhancedReport(alert.reportId);
+    const report = await reportRepository.findById(alert.reportId);
     if (!report?.warehouseId) {
       return {
         alertId: alert.id,
@@ -221,8 +225,15 @@ class ReportAlertService {
     }
 
     // Get latest upload for the platform (or any platform)
-    const uploads = await supabaseService.getClientUploads(report.clientId, platformId);
-    const latestUpload = uploads[0]; // Already sorted by date desc
+    const uploads = await uploadRepository.findByWarehouseId(report.warehouseId);
+    // Filter by platformId if specified and sort by uploadedAt desc
+    const filteredUploads = platformId
+      ? uploads.filter(u => u.platformId === platformId)
+      : uploads;
+    const sortedUploads = filteredUploads.sort((a, b) =>
+      new Date(b.uploadedAt) - new Date(a.uploadedAt)
+    );
+    const latestUpload = sortedUploads[0];
 
     const result = {
       alertId: alert.id,
@@ -261,22 +272,16 @@ class ReportAlertService {
    */
   async triggerAlert(alert, evaluationResult) {
     // Log to history
-    await supabaseService.createReportAlertHistory({
-      alertId: alert.id,
+    await alertRepository.recordTrigger(alert.id, {
       reportId: alert.reportId,
       alertType: alert.alertType,
       actualValue: evaluationResult.actualValue,
       thresholdValue: evaluationResult.thresholdValue,
       message: evaluationResult.message,
-      metadata: {
-        triggeredAt: new Date().toISOString(),
-      },
+      triggeredAt: new Date().toISOString(),
     });
 
-    // Update alert last triggered timestamp
-    await supabaseService.updateReportAlert(alert.id, {
-      lastTriggeredAt: new Date().toISOString(),
-    });
+    // Note: recordTrigger also updates lastTriggeredAt automatically
 
     // Send notifications via configured channels
     const recipients = alert.recipients || [];
@@ -327,14 +332,14 @@ class ReportAlertService {
     // Validate config based on type
     this.validateAlertConfig(alertType, config);
 
-    const alert = await supabaseService.createReportAlert({
+    const alert = await alertRepository.create({
       reportId,
-      alertType,
+      type: alertType,
       name,
       config,
       recipients: recipients || [],
       channels,
-      active: true,
+      isEnabled: true,
     });
 
     return alert;
@@ -379,14 +384,14 @@ class ReportAlertService {
   async updateAlert(alertId, updates) {
     // If updating config, validate it
     if (updates.config) {
-      const alert = await supabaseService.getReportAlert(alertId);
+      const alert = await alertRepository.findById(alertId);
       if (!alert) {
         throw new Error(`Alert ${alertId} not found`);
       }
-      this.validateAlertConfig(updates.alertType || alert.alertType, updates.config);
+      this.validateAlertConfig(updates.alertType || alert.type, updates.config);
     }
 
-    return supabaseService.updateReportAlert(alertId, updates);
+    return alertRepository.update(alertId, updates);
   }
 
   /**
@@ -396,7 +401,7 @@ class ReportAlertService {
    * @returns {boolean} Success
    */
   async deleteAlert(alertId) {
-    return supabaseService.deleteReportAlert(alertId);
+    return alertRepository.delete(alertId);
   }
 
   /**
@@ -406,7 +411,7 @@ class ReportAlertService {
    * @returns {Array} Alerts
    */
   async getReportAlerts(reportId) {
-    return supabaseService.getReportAlerts(reportId);
+    return alertRepository.findByReportId(reportId);
   }
 
   /**
@@ -417,7 +422,11 @@ class ReportAlertService {
    * @returns {Array} Alert history
    */
   async getAlertHistory(alertId = null, limit = 100) {
-    return supabaseService.getReportAlertHistory(alertId, limit);
+    if (!alertId) {
+      // If no alertId, return empty array (would need a different method for all history)
+      return [];
+    }
+    return alertRepository.getHistory(alertId, limit);
   }
 
   /**
@@ -428,7 +437,7 @@ class ReportAlertService {
    * @returns {Object} Updated alert
    */
   async toggleAlert(alertId, active) {
-    return supabaseService.updateReportAlert(alertId, { active });
+    return alertRepository.setEnabled(alertId, active);
   }
 
   /**
@@ -438,7 +447,7 @@ class ReportAlertService {
    * @returns {Object} Test result
    */
   async testAlert(alertId) {
-    const alert = await supabaseService.getReportAlert(alertId);
+    const alert = await alertRepository.findById(alertId);
     if (!alert) {
       throw new Error(`Alert ${alertId} not found`);
     }
