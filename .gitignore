@@ -70,3 +70,7 @@ client/public/assets/demo/demo-poster.jpg
 PRODUCTION-READINESS-PLAN.md
 PRODUCT-PROGRESSION.md
 E2E-TESTING-TODO.md
+
+# Claude Code configuration (local development only)
+.claude/
+CLAUDE.md
