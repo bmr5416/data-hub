@@ -20,7 +20,7 @@ class WarehouseRepository extends BaseRepository {
       name: row.name,
       platforms: row.platforms || [],
       fieldSelections: row.field_selections || {},
-      includeBlendedTable: row.include_blended_table,
+      includeBlendedTable: row.include_blended_data,
       status: row.status,
       lastSyncAt: row.last_sync_at,
       createdAt: row.created_at,
@@ -39,7 +39,7 @@ class WarehouseRepository extends BaseRepository {
     if (data.name !== undefined) row.name = data.name;
     if (data.platforms !== undefined) row.platforms = data.platforms;
     if (data.fieldSelections !== undefined) row.field_selections = data.fieldSelections;
-    if (data.includeBlendedTable !== undefined) row.include_blended_table = data.includeBlendedTable;
+    if (data.includeBlendedTable !== undefined) row.include_blended_data = data.includeBlendedTable;
     if (data.status !== undefined) row.status = data.status;
     if (data.lastSyncAt !== undefined) row.last_sync_at = data.lastSyncAt;
 

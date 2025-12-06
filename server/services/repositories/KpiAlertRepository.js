@@ -117,6 +117,43 @@ class KpiAlertRepository extends BaseRepository {
   }
 
   /**
+   * Record an alert trigger in history
+   * @param {Object} data - Trigger data
+   * @returns {Promise<Object>} Created history entry
+   */
+  async recordTrigger(data) {
+    await this.init();
+
+    const historyId = `alhist-${Date.now().toString(36)}`;
+
+    const { data: entry, error } = await supabase
+      .from('alert_history')
+      .insert({
+        id: historyId,
+        alert_id: data.alertId,
+        kpi_id: data.kpiId,
+        actual_value: data.actualValue,
+        threshold: data.threshold,
+        message: data.message,
+        triggered_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return {
+      id: entry.id,
+      alertId: entry.alert_id,
+      kpiId: entry.kpi_id,
+      actualValue: parseFloat(entry.actual_value),
+      threshold: parseFloat(entry.threshold),
+      message: entry.message,
+      triggeredAt: entry.triggered_at,
+    };
+  }
+
+  /**
    * Get trigger history for an alert
    * @param {string} alertId - Alert ID
    * @param {number} limit - Maximum number of records to return

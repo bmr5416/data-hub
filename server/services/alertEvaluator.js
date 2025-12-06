@@ -4,7 +4,7 @@
  * Evaluates KPI values against alert thresholds and logs triggered alerts.
  */
 
-import { supabaseService } from './supabase.js';
+import { kpiRepository, kpiAlertRepository } from './repositories/index.js';
 
 /**
  * Alert condition evaluation functions
@@ -43,13 +43,13 @@ function generateAlertMessage(condition, value, threshold, kpiName) {
  */
 async function evaluateKPIAlerts(kpiId, currentValue, baseline = null) {
   // Get the KPI details
-  const kpi = await supabaseService.getKPI(kpiId);
+  const kpi = await kpiRepository.findById(kpiId);
   if (!kpi) {
     throw new Error(`KPI ${kpiId} not found`);
   }
 
   // Get all active alerts for this KPI
-  const alerts = await supabaseService.getKPIAlerts(kpiId);
+  const alerts = await kpiAlertRepository.findByKpiId(kpiId);
   const activeAlerts = alerts.filter((alert) => alert.active);
 
   if (activeAlerts.length === 0) {
@@ -86,7 +86,7 @@ async function evaluateKPIAlerts(kpiId, currentValue, baseline = null) {
       );
 
       // Log to alert history
-      const historyEntry = await supabaseService.createAlertHistory({
+      const historyEntry = await kpiAlertRepository.recordTrigger({
         alertId: alert.id,
         kpiId,
         actualValue: currentValue,

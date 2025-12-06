@@ -1,4 +1,9 @@
-import { supabaseService } from './supabase.js';
+import {
+  warehouseRepository,
+  uploadRepository,
+  platformDataRepository,
+  blendedDataRepository,
+} from './repositories/index.js';
 import { v4 as uuidv4 } from 'uuid';
 import { getPlatformMapping } from '../data/platformMappings.js';
 import { getPlatformById } from '../data/platforms.js';
@@ -37,12 +42,12 @@ class ClientWorkbookService {
 
     const name = `${clientName} - Data Workspace`;
 
-    // Create warehouse config in Supabase
-    const warehouse = await supabaseService.createWarehouse(clientId, {
+    // Create warehouse config
+    const warehouse = await warehouseRepository.createForClient(clientId, {
       name,
       platforms: [],
       fieldSelections: {},
-      includeBlendedData: true,
+      includeBlendedTable: true,
     });
 
     return {
@@ -121,7 +126,7 @@ class ClientWorkbookService {
       },
     };
 
-    await supabaseService.updateWarehouse(warehouseId, {
+    await warehouseRepository.update(warehouseId, {
       platforms: updatedPlatforms,
       fieldSelections: updatedFieldSelections,
     });
@@ -149,7 +154,7 @@ class ClientWorkbookService {
     }
 
     // Get upload info for each platform
-    const uploads = await supabaseService.getClientUploads(warehouse.clientId);
+    const uploads = await uploadRepository.findByClientId(warehouse.clientId);
 
     const platforms = warehouse.platforms.map((platformId) => {
       const platform = getPlatformById(platformId);
@@ -171,7 +176,7 @@ class ClientWorkbookService {
       warehouseId: warehouse.id,
       title: warehouse.name,
       platforms,
-      includeBlendedData: warehouse.includeBlendedData,
+      includeBlendedData: warehouse.includeBlendedTable,
       createdAt: warehouse.createdAt,
       updatedAt: warehouse.updatedAt,
     };
@@ -191,24 +196,25 @@ class ClientWorkbookService {
     await this.init();
 
     // Create upload record
-    const upload = await supabaseService.createUpload(clientId, {
+    const upload = await uploadRepository.create({
+      clientId,
       platformId,
       filename: `${platformId}_${Date.now()}`,
       originalFilename: filename,
-      fileSize: 0, // Could calculate from rows
       rowCount: rows.length,
       columnHeaders: headers,
+      status: 'pending',
     });
 
     try {
       // Update status to processing
-      await supabaseService.updateUpload(upload.id, { status: 'processing' });
+      await uploadRepository.update(upload.id, { status: 'processing' });
 
       // Insert platform data
-      await supabaseService.insertPlatformData(upload.id, clientId, platformId, rows);
+      await platformDataRepository.bulkInsert(upload.id, clientId, platformId, rows);
 
       // Update status to completed
-      await supabaseService.updateUpload(upload.id, {
+      await uploadRepository.update(upload.id, {
         status: 'completed',
         rowCount: rows.length,
       });
@@ -221,7 +227,7 @@ class ClientWorkbookService {
       };
     } catch (error) {
       // Update status to error
-      await supabaseService.updateUpload(upload.id, {
+      await uploadRepository.update(upload.id, {
         status: 'error',
         errorMessage: error.message,
       });
@@ -239,7 +245,7 @@ class ClientWorkbookService {
   async validateSourceData(clientId, platformId) {
     await this.init();
 
-    const uploads = await supabaseService.getClientUploads(clientId, platformId);
+    const uploads = await uploadRepository.findByClientId(clientId, platformId);
 
     if (uploads.length === 0) {
       return {
@@ -298,7 +304,7 @@ class ClientWorkbookService {
   async getSourceData(clientId, platformId) {
     await this.init();
 
-    const result = await supabaseService.getPlatformData(clientId, platformId);
+    const result = await platformDataRepository.findByClientId(clientId, platformId);
 
     return result.data.map((row) => row.rowData);
   }
@@ -318,10 +324,10 @@ class ClientWorkbookService {
     const batchId = `blend-${uuidv4().slice(0, 8)}`;
 
     // Delete previous blended data for this client (optional - could keep history)
-    await supabaseService.deleteBlendedData(clientId);
+    await blendedDataRepository.deleteByClient(clientId);
 
     // Insert new blended data
-    const rowsWritten = await supabaseService.insertBlendedData(
+    const rowsWritten = await blendedDataRepository.bulkInsert(
       clientId,
       batchId,
       blendedData,
@@ -345,7 +351,7 @@ class ClientWorkbookService {
   async getBlendedData(clientId) {
     await this.init();
 
-    const blendedData = await supabaseService.getBlendedData(clientId);
+    const blendedData = await blendedDataRepository.findByClientId(clientId);
 
     return blendedData.map((row) => row.rowData);
   }
@@ -364,10 +370,10 @@ class ClientWorkbookService {
 
     // Get paginated data for this platform using built-in pagination
     const paginationOptions = limit !== null ? { limit, offset } : {};
-    const result = await supabaseService.getPlatformData(clientId, platformId, null, paginationOptions);
+    const result = await platformDataRepository.findByClientId(clientId, platformId, null, paginationOptions);
 
     // Get column headers from latest upload
-    const uploads = await supabaseService.getClientUploads(clientId, platformId);
+    const uploads = await uploadRepository.findByClientId(clientId, platformId);
     const columns = uploads.length > 0 ? (uploads[0].columnHeaders || []) : [];
 
     // Extract row data from paginated result
@@ -396,7 +402,7 @@ class ClientWorkbookService {
     await this.init();
 
     // Get all blended data
-    const allData = await supabaseService.getBlendedData(clientId);
+    const allData = await blendedDataRepository.findByClientId(clientId);
     const totalRows = allData.length;
 
     // Extract columns from first row (if available)
@@ -432,10 +438,10 @@ class ClientWorkbookService {
     await this.init();
 
     // Delete all platform data
-    await supabaseService.deletePlatformData(clientId);
+    await platformDataRepository.deleteByClient(clientId);
 
     // Delete all blended data
-    await supabaseService.deleteBlendedData(clientId);
+    await blendedDataRepository.deleteByClient(clientId);
 
     return true;
   }
@@ -480,7 +486,7 @@ class ClientWorkbookService {
    */
   async getUploads(clientId, platformId = null) {
     await this.init();
-    return supabaseService.getClientUploads(clientId, platformId);
+    return uploadRepository.findByClientId(clientId, platformId);
   }
 
   /**
@@ -491,7 +497,7 @@ class ClientWorkbookService {
    */
   async deleteUpload(uploadId) {
     await this.init();
-    return supabaseService.deleteUpload(uploadId);
+    return uploadRepository.delete(uploadId);
   }
 
   /**
@@ -502,7 +508,7 @@ class ClientWorkbookService {
    */
   async getWarehouseById(warehouseId) {
     await this.init();
-    return supabaseService.getWarehouseById(warehouseId);
+    return warehouseRepository.findById(warehouseId);
   }
 
   /**
@@ -534,13 +540,13 @@ class ClientWorkbookService {
     delete updatedFieldSelections[platformId];
 
     // Update warehouse
-    await supabaseService.updateWarehouse(warehouseId, {
+    await warehouseRepository.update(warehouseId, {
       platforms: updatedPlatforms,
       fieldSelections: updatedFieldSelections,
     });
 
     // Delete related uploads and data
-    await supabaseService.deleteUploadsByPlatform(clientId, platformId);
+    await uploadRepository.deleteByClientPlatform(clientId, platformId);
 
     return { success: true, platformId };
   }
