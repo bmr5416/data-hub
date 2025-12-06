@@ -18,7 +18,7 @@ import mappingsRouter from './routes/mappings.js';
 import alertsRouter from './routes/alerts.js';
 import adminRouter from './routes/admin.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { requireAuth } from './middleware/auth.js';
+import { requireAuth, validateAuthConfig } from './middleware/auth.js';
 import { requestIdMiddleware, requestLoggingMiddleware } from './middleware/requestId.js';
 import { apiLimiter, authLimiter, uploadLimiter } from './middleware/rateLimiter.js';
 import { standardTimeout } from './middleware/timeout.js';
@@ -127,10 +127,18 @@ let server;
 
 /**
  * Start server with proper initialization order
- * Scheduler is initialized BEFORE server starts accepting requests
+ * Auth config and scheduler are validated/initialized BEFORE server starts accepting requests
  */
 async function startServer() {
-  // Initialize scheduler first (if enabled)
+  // Validate auth configuration (JWKS endpoint or JWT secret)
+  try {
+    await validateAuthConfig();
+  } catch (error) {
+    logger.error('Auth configuration validation failed', { component: 'Server', error: error.message });
+    throw error; // Fatal - can't start without auth
+  }
+
+  // Initialize scheduler (if enabled)
   if (process.env.SCHEDULER_ENABLED !== 'false') {
     try {
       await schedulerService.init();

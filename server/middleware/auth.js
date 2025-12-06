@@ -306,3 +306,76 @@ export async function optionalAuth(req, res, next) {
     next();
   }
 }
+
+/**
+ * Validate auth configuration at startup
+ * Verifies JWKS endpoint reachability for production or JWT secret for local dev
+ * Call this before server starts accepting requests to fail fast on misconfiguration
+ *
+ * @returns {Promise<void>}
+ * @throws {Error} If auth configuration is invalid
+ */
+export async function validateAuthConfig() {
+  const isProduction = isProductionSupabase();
+  const supabaseUrl = process.env.SUPABASE_URL;
+
+  if (!supabaseUrl) {
+    throw new Error('SUPABASE_URL environment variable is required');
+  }
+
+  if (isProduction) {
+    // Production: Verify JWKS endpoint is reachable
+    const jwksUrl = new URL('/auth/v1/.well-known/jwks.json', supabaseUrl);
+
+    try {
+      const response = await fetch(jwksUrl.toString(), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(10000), // 10 second timeout
+      });
+
+      if (!response.ok) {
+        throw new Error(`JWKS endpoint returned ${response.status}`);
+      }
+
+      const jwks = await response.json();
+      if (!jwks.keys || jwks.keys.length === 0) {
+        throw new Error('JWKS endpoint returned no keys');
+      }
+
+      logger.info('Auth configuration validated', {
+        mode: 'production (ES256 via JWKS)',
+        jwksUrl: jwksUrl.toString(),
+        keyCount: jwks.keys.length,
+        component: 'Auth',
+      });
+    } catch (error) {
+      // Don't fail startup for JWKS issues - it may be a temporary network issue
+      // The JWKS will be fetched lazily on first request
+      logger.warn('JWKS endpoint validation failed - will retry on first request', {
+        error: error.message,
+        jwksUrl: jwksUrl.toString(),
+        component: 'Auth',
+      });
+    }
+  } else {
+    // Local development: Verify JWT secret is configured
+    const jwtSecret = process.env.SUPABASE_JWT_SECRET;
+
+    if (!jwtSecret) {
+      throw new Error('SUPABASE_JWT_SECRET is required for local development');
+    }
+
+    if (jwtSecret.length < 32) {
+      logger.warn('JWT secret appears short - ensure this is the correct value', {
+        component: 'Auth',
+      });
+    }
+
+    logger.info('Auth configuration validated', {
+      mode: 'local development (HS256)',
+      secretConfigured: true,
+      component: 'Auth',
+    });
+  }
+}
