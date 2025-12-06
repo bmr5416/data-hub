@@ -128,13 +128,54 @@ function verifyJwtHS256(token) {
 }
 
 /**
- * Verify Supabase JWT - automatically selects verification method
+ * Parse JWT header to detect signing algorithm
+ * @param {string} token - JWT token
+ * @returns {object} Decoded header
+ */
+function parseJwtHeader(token) {
+  try {
+    const [headerB64] = token.split('.');
+    const header = JSON.parse(Buffer.from(headerB64, 'base64url').toString());
+    return header;
+  } catch {
+    return { alg: 'unknown' };
+  }
+}
+
+/**
+ * Verify Supabase JWT - automatically selects verification method based on token algorithm
  * @param {string} token - JWT token
  * @returns {Promise<object>} Decoded token payload
  */
 async function verifyJwt(token) {
-  if (isProductionSupabase()) {
+  const header = parseJwtHeader(token);
+
+  logger.debug('JWT verification starting', {
+    algorithm: header.alg,
+    kid: header.kid,
+    isProduction: isProductionSupabase(),
+    component: 'Auth'
+  });
+
+  // HS256 tokens require JWT secret (common for Supabase Cloud default config)
+  if (header.alg === 'HS256') {
+    return verifyJwtHS256(token);
+  }
+
+  // ES256 tokens can use JWKS endpoint
+  if (header.alg === 'ES256') {
     return verifyJwtES256(token);
+  }
+
+  // Fallback based on environment
+  if (isProductionSupabase()) {
+    // Try ES256 first, fall back to HS256
+    try {
+      return await verifyJwtES256(token);
+    } catch (error) {
+      logger.debug('ES256 failed, trying HS256', { error: error.message, component: 'Auth' });
+      return verifyJwtHS256(token);
+    }
   }
   return verifyJwtHS256(token);
 }
