@@ -91,3 +91,38 @@ For monorepos with separate client/server directories:
 If Vercel auto-detects the wrong framework:
 - Set `"framework": null` in vercel.json
 - This is critical for Express + Vite monorepos
+
+## Environment Variables
+
+### Required for Production
+
+| Variable | Purpose | Source |
+|----------|---------|--------|
+| `SUPABASE_URL` | Database API URL | Supabase Dashboard → Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-side admin access | Supabase Dashboard → Settings → API |
+| `SUPABASE_JWT_SECRET` | JWT signature verification | Supabase Dashboard → Settings → API |
+| `VITE_SUPABASE_URL` | Client-side API URL | Same as SUPABASE_URL |
+| `VITE_SUPABASE_ANON_KEY` | Client-side anon key | Supabase Dashboard → Settings → API |
+
+### Adding via CLI
+
+For secrets with special characters (`+`, `/`, `=`), use `printf` to avoid encoding issues:
+
+```bash
+# Correct way (preserves special characters)
+printf '%s' 'your-secret-with+special/chars==' | npx vercel env add SUPABASE_JWT_SECRET production
+
+# Standard variables
+npx vercel env add SUPABASE_URL production
+# Enter value when prompted
+```
+
+### Verifying Configuration
+
+```bash
+# List all production variables
+npx vercel env ls production
+
+# Pull to local .env for testing
+npx vercel env pull .env.local
+```

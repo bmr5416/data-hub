@@ -96,9 +96,26 @@ VITE_SUPABASE_ANON_KEY=eyJ...
 
 ### JWT Verification
 
-The auth middleware automatically detects the environment:
-- **Local** (`127.0.0.1`): Uses HS256 symmetric verification with `SUPABASE_JWT_SECRET`
-- **Production** (`*.supabase.co`): Uses ES256 asymmetric verification via JWKS endpoint
+The auth middleware (`server/middleware/auth.js`) auto-detects the JWT signing algorithm:
+
+| Token Algorithm | Verification Method | When Used |
+|-----------------|---------------------|-----------|
+| HS256 | Symmetric key (`SUPABASE_JWT_SECRET`) | Supabase CLI & Cloud (default) |
+| ES256 | Asymmetric via JWKS endpoint | Supabase Cloud (if configured) |
+
+The middleware parses the JWT header to detect the algorithm and routes to the appropriate verifier.
+
+### Startup Validation
+
+The server validates auth configuration before accepting requests (`validateAuthConfig()`):
+- **Production**: Verifies JWKS endpoint is reachable (warning if unavailable, lazy retry on first request)
+- **Local**: Verifies `SUPABASE_JWT_SECRET` exists (fatal if missing)
+
+```javascript
+// server/index.js - called during startServer()
+import { validateAuthConfig } from './middleware/auth.js';
+await validateAuthConfig();
+```
 
 ## Local Development
 
