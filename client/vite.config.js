@@ -3,9 +3,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  // Vercel serves from root - no base path needed
   base: '/',
-  // Output to client/dist (default), vercel.json points here
+  build: {
+    outDir: '../dist',
+    emptyOutDir: true,
+  },
   server: {
     port: 5173,
     proxy: {
