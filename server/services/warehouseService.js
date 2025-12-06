@@ -1,4 +1,4 @@
-import { supabaseService } from './supabase.js';
+import { warehouseRepository, platformDataRepository } from './repositories/index.js';
 import { getDimensionById } from '../data/dimensions.js';
 import { getMetricById } from '../data/metrics.js';
 import { getPlatformById } from '../data/platforms.js';
@@ -59,7 +59,7 @@ class WarehouseService {
       }
 
       // Store warehouse metadata in Supabase
-      const warehouse = await supabaseService.createWarehouse(clientId, {
+      const warehouse = await warehouseRepository.createForClient(clientId, {
         name: warehouseName,
         platforms,
         fieldSelections,
@@ -77,7 +77,7 @@ class WarehouseService {
    * Get warehouse details
    */
   async getWarehouse(warehouseId) {
-    const warehouse = await supabaseService.getWarehouseById(warehouseId);
+    const warehouse = await warehouseRepository.findById(warehouseId);
     if (!warehouse) return null;
     return warehouse;
   }
@@ -86,7 +86,7 @@ class WarehouseService {
    * Get warehouse schema (all tables and their columns)
    */
   async getWarehouseSchema(warehouseId) {
-    const warehouse = await supabaseService.getWarehouseById(warehouseId);
+    const warehouse = await warehouseRepository.findById(warehouseId);
     if (!warehouse) return null;
 
     // Build schema from fieldSelections
@@ -115,7 +115,7 @@ class WarehouseService {
    * Get warehouse statistics
    */
   async getWarehouseStats(warehouseId) {
-    const warehouse = await supabaseService.getWarehouseById(warehouseId);
+    const warehouse = await warehouseRepository.findById(warehouseId);
     if (!warehouse) return null;
 
     const platforms = warehouse.platforms || [];
@@ -123,12 +123,12 @@ class WarehouseService {
 
     // Get actual row count from platform_data for this warehouse's platforms
     const totalRows = platforms.length > 0 && clientId
-      ? await supabaseService.countPlatformDataRows(clientId, platforms)
+      ? await platformDataRepository.countByClientId(clientId, platforms)
       : 0;
 
     // Get the latest upload date for this warehouse's platforms
     const lastImport = platforms.length > 0 && clientId
-      ? await supabaseService.getLatestUploadDate(clientId, platforms)
+      ? await platformDataRepository.getLatestUploadDate(clientId, platforms)
       : null;
 
     return {

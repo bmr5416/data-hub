@@ -5,11 +5,7 @@ export default defineConfig({
   plugins: [react()],
   // Vercel serves from root - no base path needed
   base: '/',
-  build: {
-    // Output to root-level dist for Vercel deployment
-    outDir: '../dist',
-    emptyOutDir: true,
-  },
+  // Output to client/dist (default), vercel.json points here
   server: {
     port: 5173,
     proxy: {

@@ -5,7 +5,7 @@
  * Merges system default mappings with client-specific overrides.
  */
 
-import { supabaseService } from './supabase.js';
+import { mappingRepository } from './repositories/index.js';
 import {
   getPlatformMapping,
 } from '../data/platformMappings.js';
@@ -24,7 +24,7 @@ async function getClientPlatformMappings(clientId, platformId) {
   }
 
   // Get client custom mappings
-  const customMappings = await supabaseService.getClientPlatformMappings(clientId, platformId);
+  const customMappings = await mappingRepository.findByClientAndPlatform(clientId, platformId);
 
   // Build custom mappings lookup
   const customDimensionsMap = {};
@@ -85,7 +85,7 @@ async function getClientPlatformMappings(clientId, platformId) {
  * Get all custom mappings for a client across all platforms
  */
 async function getAllClientMappings(clientId) {
-  return await supabaseService.getClientPlatformMappings(clientId);
+  return await mappingRepository.findByClientId(clientId);
 }
 
 /**
@@ -108,7 +108,7 @@ async function createCustomMapping(clientId, data) {
   }
 
   // Check if custom mapping already exists
-  const existing = await supabaseService.getClientPlatformMappings(clientId, data.platformId);
+  const existing = await mappingRepository.findByClientAndPlatform(clientId, data.platformId);
   const duplicate = existing.find(
     (m) => m.canonicalId === data.canonicalId && m.fieldType === data.fieldType
   );
@@ -119,7 +119,7 @@ async function createCustomMapping(clientId, data) {
     );
   }
 
-  return await supabaseService.createPlatformMapping({
+  return await mappingRepository.create({
     clientId,
     platformId: data.platformId,
     fieldType: data.fieldType,

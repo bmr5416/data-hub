@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { supabaseService } from './supabase.js';
+import { smtpConfigRepository } from './repositories/index.js';
 import { decrypt, isEncrypted } from '../utils/crypto.js';
 import logger from '../utils/logger.js';
 
@@ -29,10 +29,10 @@ class EmailService {
 
       if (smtpConfigId) {
         // Load specific config from database
-        config = await supabaseService.getSmtpConfig(smtpConfigId);
+        config = await smtpConfigRepository.findById(smtpConfigId);
       } else {
         // Try to get default config from database
-        config = await supabaseService.getDefaultSmtpConfig();
+        config = await smtpConfigRepository.findDefault();
       }
 
       if (config) {
