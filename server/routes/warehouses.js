@@ -1,7 +1,7 @@
 import express from 'express';
 import warehouseService from '../services/warehouseService.js';
-import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { clientRepository, warehouseRepository } from '../services/repositories/index.js';
+import { AppError } from '../errors/AppError.js';
 import {
   validateEntityId,
   validateWarehouseCreate,
@@ -42,7 +42,7 @@ async function attachWarehouseClientId(req, res, next) {
 router.get('/clients/:clientId/warehouses', requireClientAccess, async (req, res, next) => {
   try {
     const clientId = validateEntityId(req.params.clientId, 'clientId');
-    const warehouses = await supabaseService.getClientWarehouses(clientId);
+    const warehouses = await warehouseRepository.findByClientId(clientId);
     res.json({ warehouses });
   } catch (error) {
     next(error);
@@ -66,7 +66,7 @@ router.post('/clients/:clientId/warehouses', requireClientAccess, requireMinimum
     const { name, platforms, fieldSelections, includeBlendedTable } = validateWarehouseCreate(req.body);
 
     // Get client name for warehouse naming
-    const client = await supabaseService.getClient(clientId);
+    const client = await clientRepository.findById(clientId);
     if (!client) {
       throw new AppError('Client not found', 404);
     }
@@ -92,7 +92,7 @@ router.put('/warehouses/:warehouseId', attachWarehouseClientId, requireClientAcc
     const warehouseId = validateEntityId(req.params.warehouseId, 'warehouseId');
     const updates = validateWarehouseUpdate(req.body);
 
-    const warehouse = await supabaseService.updateWarehouse(warehouseId, updates);
+    const warehouse = await warehouseRepository.update(warehouseId, updates);
 
     if (!warehouse) {
       throw new AppError('Warehouse not found', 404);

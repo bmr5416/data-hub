@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { kpiRepository } from '../services/repositories/index.js';
+import { AppError } from '../errors/AppError.js';
 import { validateEntityId } from '../services/validators.js';
 import { requireAuth } from '../middleware/auth.js';
 import { requireClientAccess, requireMinimumRole } from '../middleware/clientAccess.js';
@@ -20,7 +20,7 @@ async function attachKPIClientId(req, res, next) {
     if (!kpiId) return next();
 
     const validatedId = validateEntityId(kpiId, 'kpiId');
-    const kpi = await supabaseService.getKPI(validatedId);
+    const kpi = await kpiRepository.findById(validatedId);
     if (!kpi) {
       throw new AppError('KPI not found', 404);
     }
@@ -60,7 +60,7 @@ function validateKPIData(data, isUpdate = false) {
 // GET /api/kpis - List KPIs (filtered by user's access)
 router.get('/', attachUserClientIds, async (req, res, next) => {
   try {
-    const kpis = await supabaseService.getAllKPIs();
+    const kpis = await kpiRepository.findAll();
     const filteredKpis = filterByClientAccess(kpis, req.userClientIds);
     res.json({ kpis: filteredKpis });
   } catch (error) {
@@ -87,7 +87,7 @@ router.put('/:id', attachKPIClientId, requireClientAccess, requireMinimumRole('e
       throw new AppError(validationErrors.join(', '), 400);
     }
 
-    const kpi = await supabaseService.updateKPI(kpiId, req.body);
+    const kpi = await kpiRepository.update(kpiId, req.body);
     if (!kpi) {
       throw new AppError('KPI not found', 404);
     }
@@ -102,7 +102,7 @@ router.put('/:id', attachKPIClientId, requireClientAccess, requireMinimumRole('e
 router.delete('/:id', attachKPIClientId, requireClientAccess, requireMinimumRole('admin'), async (req, res, next) => {
   try {
     const kpiId = validateEntityId(req.params.id, 'kpiId');
-    const deleted = await supabaseService.deleteKPI(kpiId);
+    const deleted = await kpiRepository.delete(kpiId);
     if (!deleted) {
       throw new AppError('KPI not found', 404);
     }

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { sourceRepository } from '../services/repositories/index.js';
+import { AppError } from '../errors/AppError.js';
 import { validateUUID } from '../services/validators.js';
 import { requireAuth } from '../middleware/auth.js';
 import { requireClientAccess, requireMinimumRole } from '../middleware/clientAccess.js';
@@ -70,7 +70,7 @@ async function attachSourceClientId(req, res, next) {
     if (!sourceId) return next();
 
     validateUUID(sourceId, 'sourceId');
-    const source = await supabaseService.getSource(sourceId);
+    const source = await sourceRepository.findById(sourceId);
     if (!source) {
       throw AppError.notFound('Source', sourceId);
     }
@@ -87,7 +87,7 @@ async function attachSourceClientId(req, res, next) {
 // GET /api/sources - List sources (filtered by user's access)
 router.get('/', attachUserClientIds, async (req, res, next) => {
   try {
-    const sources = await supabaseService.getAllSources();
+    const sources = await sourceRepository.findAll();
     const filteredSources = filterByClientAccess(sources, req.userClientIds);
     res.json({ sources: filteredSources });
   } catch (error) {
@@ -114,7 +114,7 @@ router.put('/:id', attachSourceClientId, requireClientAccess, requireMinimumRole
       throw new AppError(validationErrors.join(', '), 400);
     }
 
-    const source = await supabaseService.updateSource(sourceId, req.body);
+    const source = await sourceRepository.update(sourceId, req.body);
     if (!source) {
       throw new AppError('Source not found', 404);
     }
@@ -129,7 +129,7 @@ router.put('/:id', attachSourceClientId, requireClientAccess, requireMinimumRole
 router.delete('/:id', attachSourceClientId, requireClientAccess, requireMinimumRole('editor'), async (req, res, next) => {
   try {
     const sourceId = validateUUID(req.params.id, 'sourceId');
-    const deleted = await supabaseService.deleteSource(sourceId);
+    const deleted = await sourceRepository.delete(sourceId);
     if (!deleted) {
       throw new AppError('Source not found', 404);
     }

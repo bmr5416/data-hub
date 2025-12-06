@@ -11,6 +11,9 @@
       "maxDuration": 10,
       "includeFiles": "server/**"
     },
+    "api/cron/daily.js": {
+      "maxDuration": 10
+    },
     "api/cron/reports.js": {
       "maxDuration": 10
     },
@@ -20,12 +23,8 @@
   },
   "crons": [
     {
-      "path": "/api/cron/reports",
-      "schedule": "0 * * * *"
-    },
-    {
-      "path": "/api/cron/alerts",
-      "schedule": "*/15 * * * *"
+      "path": "/api/cron/daily",
+      "schedule": "0 9 * * *"
     }
   ]
 }

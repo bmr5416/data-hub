@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
-import { AppError } from '../middleware/errorHandler.js';
+import { etlRepository } from '../services/repositories/index.js';
+import { AppError } from '../errors/AppError.js';
 import { validateEntityId } from '../services/validators.js';
 import { requireAuth } from '../middleware/auth.js';
 import { requireClientAccess, requireMinimumRole } from '../middleware/clientAccess.js';
@@ -20,7 +20,7 @@ async function attachETLClientId(req, res, next) {
     if (!etlId) return next();
 
     const validatedId = validateEntityId(etlId, 'etlId');
-    const etlProcess = await supabaseService.getETLProcess(validatedId);
+    const etlProcess = await etlRepository.findById(validatedId);
     if (!etlProcess) {
       throw new AppError('ETL process not found', 404);
     }
@@ -60,7 +60,7 @@ function validateETLData(data, isUpdate = false) {
 // GET /api/etl - List ETL processes (filtered by user's access)
 router.get('/', attachUserClientIds, async (req, res, next) => {
   try {
-    const etlProcesses = await supabaseService.getAllETLProcesses();
+    const etlProcesses = await etlRepository.findAll();
     const filteredProcesses = filterByClientAccess(etlProcesses, req.userClientIds);
     res.json({ etlProcesses: filteredProcesses });
   } catch (error) {
@@ -87,7 +87,7 @@ router.put('/:id', attachETLClientId, requireClientAccess, requireMinimumRole('e
       throw new AppError(validationErrors.join(', '), 400);
     }
 
-    const etlProcess = await supabaseService.updateETLProcess(etlId, req.body);
+    const etlProcess = await etlRepository.update(etlId, req.body);
     if (!etlProcess) {
       throw new AppError('ETL process not found', 404);
     }
@@ -102,7 +102,7 @@ router.put('/:id', attachETLClientId, requireClientAccess, requireMinimumRole('e
 router.delete('/:id', attachETLClientId, requireClientAccess, requireMinimumRole('editor'), async (req, res, next) => {
   try {
     const etlId = validateEntityId(req.params.id, 'etlId');
-    const deleted = await supabaseService.deleteETLProcess(etlId);
+    const deleted = await etlRepository.delete(etlId);
     if (!deleted) {
       throw new AppError('ETL process not found', 404);
     }

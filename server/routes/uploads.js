@@ -3,7 +3,7 @@ import multer from 'multer';
 import Papa from 'papaparse';
 import clientDataService from '../services/clientDataService.js';
 import blendingService from '../services/blendingService.js';
-import { supabaseService } from '../services/supabase.js';
+import { clientRepository, warehouseRepository } from '../services/repositories/index.js';
 import { AppError } from '../errors/AppError.js';
 import { getPlatformById } from '../data/platforms.js';
 import { getRequestLogger } from '../middleware/requestId.js';
@@ -92,13 +92,13 @@ router.get('/clients/:clientId/data', requireClientAccess, async (req, res, next
     const clientId = validateEntityId(req.params.clientId, 'clientId');
 
     // Get client to verify it exists
-    const client = await supabaseService.getClient(clientId);
+    const client = await clientRepository.findById(clientId);
     if (!client) {
       throw new AppError('Client not found', 404);
     }
 
     // Check if client has a warehouse (platform data config)
-    const warehouses = await supabaseService.getClientWarehouses(clientId);
+    const warehouses = await warehouseRepository.findByClientId(clientId);
     const warehouse = warehouses[0] || null;
 
     if (!warehouse) {
@@ -132,13 +132,13 @@ router.post('/clients/:clientId/data', requireClientAccess, requireMinimumRole('
     const clientId = validateEntityId(req.params.clientId, 'clientId');
 
     // Get client to verify it exists
-    const client = await supabaseService.getClient(clientId);
+    const client = await clientRepository.findById(clientId);
     if (!client) {
       throw new AppError('Client not found', 404);
     }
 
     // Check if client already has a workbook
-    const existingWarehouses = await supabaseService.getClientWarehouses(clientId);
+    const existingWarehouses = await warehouseRepository.findByClientId(clientId);
     const existingWarehouse = existingWarehouses[0] || null;
 
     if (existingWarehouse) {
@@ -177,7 +177,7 @@ router.post('/clients/:clientId/data/platforms', requireClientAccess, requireMin
     }
 
     // Get client's warehouse
-    const warehouses = await supabaseService.getClientWarehouses(clientId);
+    const warehouses = await warehouseRepository.findByClientId(clientId);
     const warehouse = warehouses[0] || null;
 
     if (!warehouse) {
@@ -206,7 +206,7 @@ router.delete('/clients/:clientId/data/platforms/:platformId', requireClientAcce
     const { platformId } = req.params;
 
     // Get client's warehouse
-    const warehouses = await supabaseService.getClientWarehouses(clientId);
+    const warehouses = await warehouseRepository.findByClientId(clientId);
     const warehouse = warehouses[0] || null;
 
     if (!warehouse) {
@@ -250,7 +250,7 @@ router.post(
       }
 
       // Get client's warehouse
-      const warehouses = await supabaseService.getClientWarehouses(clientId);
+      const warehouses = await warehouseRepository.findByClientId(clientId);
       const warehouse = warehouses[0] || null;
 
       if (!warehouse) {
@@ -359,7 +359,7 @@ router.get('/clients/:clientId/data/validate', requireClientAccess, async (req, 
     const { platformId } = req.query;
 
     // Get client's warehouse
-    const warehouses = await supabaseService.getClientWarehouses(clientId);
+    const warehouses = await warehouseRepository.findByClientId(clientId);
     const warehouse = warehouses[0] || null;
 
     if (!warehouse) {
@@ -398,7 +398,7 @@ router.post('/clients/:clientId/data/blend', requireClientAccess, requireMinimum
     const { groupBy } = req.body;
 
     // Get client's warehouse
-    const warehouses = await supabaseService.getClientWarehouses(clientId);
+    const warehouses = await warehouseRepository.findByClientId(clientId);
     const warehouse = warehouses[0] || null;
 
     if (!warehouse) {

@@ -100,7 +100,7 @@ router.post('/', extractClientIdFromBody, requireClientAccess, requireMinimumRol
 router.delete('/:id', attachLineageClientId, requireClientAccess, requireMinimumRole('editor'), async (req, res, next) => {
   try {
     const lineageId = validateEntityId(req.params.id, 'lineageId');
-    const deleted = await supabaseService.deleteLineage(lineageId);
+    const deleted = await lineageRepository.delete(lineageId);
     if (!deleted) {
       throw new AppError('Lineage connection not found', 404);
     }

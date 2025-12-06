@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { supabaseService } from '../services/supabase.js';
+import { reportRepository, alertRepository, deliveryHistoryRepository } from '../services/repositories/index.js';
 import { reportService } from '../services/reportService.js';
 import { reportAlertService } from '../services/reportAlertService.js';
 import { AppError } from '../errors/AppError.js';
@@ -26,7 +26,7 @@ async function attachReportClientId(req, res, next) {
     if (!reportId) return next();
 
     const validatedId = validateEntityId(reportId, 'reportId');
-    const report = await supabaseService.getEnhancedReport(validatedId);
+    const report = await reportRepository.findById(validatedId);
     if (!report) {
       throw AppError.notFound('Report', reportId);
     }
@@ -71,7 +71,7 @@ function validateReportData(data, isUpdate = false) {
 // GET /api/reports - List reports (filtered by user's access)
 router.get('/', attachUserClientIds, async (req, res, next) => {
   try {
-    const reports = await supabaseService.getAllReports();
+    const reports = await reportRepository.findAll();
     const filteredReports = filterByClientAccess(reports, req.userClientIds);
     res.json({ reports: filteredReports });
   } catch (error) {
@@ -93,7 +93,7 @@ router.post('/', requireClientAccess, requireMinimumRole('editor'), async (req, 
     }
     const validatedClientId = validateEntityId(clientId, 'clientId');
 
-    const report = await supabaseService.createEnhancedReport(validatedClientId, req.body);
+    const report = await reportRepository.createForClient(validatedClientId, req.body);
     res.status(201).json({ report });
   } catch (error) {
     next(error);
@@ -119,7 +119,7 @@ router.put('/:id', attachReportClientId, requireClientAccess, requireMinimumRole
       throw new AppError(validationErrors.join(', '), 400);
     }
 
-    const report = await supabaseService.updateEnhancedReport(reportId, req.body);
+    const report = await reportRepository.update(reportId, req.body);
     if (!report) {
       throw new AppError('Report not found', 404);
     }
@@ -134,7 +134,7 @@ router.put('/:id', attachReportClientId, requireClientAccess, requireMinimumRole
 router.delete('/:id', attachReportClientId, requireClientAccess, requireMinimumRole('admin'), async (req, res, next) => {
   try {
     const reportId = validateEntityId(req.params.id, 'reportId');
-    const deleted = await supabaseService.deleteReport(reportId);
+    const deleted = await reportRepository.delete(reportId);
     if (!deleted) {
       throw new AppError('Report not found', 404);
     }
@@ -282,7 +282,7 @@ router.get('/:id/delivery-history', attachReportClientId, requireClientAccess, a
     const { limit = 50 } = req.query;
     // Validate limit with bounds checking
     const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 50, 1), 500);
-    const history = await supabaseService.getReportDeliveryHistory(
+    const history = await deliveryHistoryRepository.findByReportId(
       reportId,
       parsedLimit
     );
@@ -329,7 +329,7 @@ router.get('/:id/alerts/:alertId', attachReportClientId, requireClientAccess, as
   try {
     const reportId = validateEntityId(req.params.id, 'reportId');
     const alertId = validateEntityId(req.params.alertId, 'alertId');
-    const alert = await supabaseService.getReportAlert(alertId);
+    const alert = await alertRepository.findById(alertId);
     if (!alert || alert.reportId !== reportId) {
       throw new AppError('Alert not found', 404);
     }
