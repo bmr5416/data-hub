@@ -111,12 +111,27 @@ function verifyJwtHS256(token) {
     throw new AppError('Server authentication not configured', 500);
   }
 
+  // Debug: Log secret length and first/last chars (safe for debugging)
+  logger.debug('HS256 verification attempt', {
+    secretLength: secret.length,
+    secretPrefix: secret.substring(0, 4),
+    secretSuffix: secret.substring(secret.length - 4),
+    component: 'Auth'
+  });
+
   try {
     const decoded = jwt.verify(token, secret, {
       algorithms: ['HS256'],
     });
     return decoded;
   } catch (error) {
+    // Debug: Log the actual error from jsonwebtoken
+    logger.error('HS256 JWT verification failed', {
+      errorName: error.name,
+      errorMessage: error.message,
+      component: 'Auth'
+    });
+
     if (error.name === 'TokenExpiredError') {
       throw new AppError('Token expired', 401);
     }
